@@ -102,18 +102,15 @@ namespace TaskGenerator
                     
                     int numCount2 = 3 + random.Next(0, 4);
 
-                    string numString2 = (numCount2 == 3) ? "3 диска" : (numCount2 == 4) ? "4 диска" : numCount2 == 5 ? "5 дисков" : "6 дисков";
-                    task2.condition = "Цифровой кодовый замок на сейфе имеет на общей оси " + numString2 + ", каждый из которых разделен на десять секторов." +
-                                    " Какова вероятность открыть замок, выбирая код наудачу, если кодовая комбинация: ";
-                    task2.questions.Add("Неизвестна.");
-                    task2.questions.Add("Не содержит одинаковых цифр.");
-                    int ans1 = (int)Math.Pow(10, numCount2);
+                    string numString2 = (numCount2 == 3) ? "трёхзначный" : (numCount2 == 4) ? "четырёхзначный" : numCount2 == 5 ? "пятизначный" : "шестизначный";
+                    task2.condition = "Компьютер тайно от оператора формирует " + numString2 + "кодовый номер кредитной карточки для клиента банка, используя датчик случайных чисел." +
+                                    " Какова вероятность, что оператор угадает код карточки, если он знает, что: ";
+                    task2.questions.Add("цифры в коде не повторяются;");
+                    task2.questions.Add(" код не содержит цифры 0 и 1?;");
+                    double ans1 =  Factorial(10) / Factorial(10 - numCount2);
+
                     task2.answers.Add(String.Format("1/{0:0} ≈ {1:0.000000}", ans1, 1 / (double)ans1));
-                    int ans2 = 1;
-                    for(int i = 0, x = 10; i < numCount2; i++, x--)
-                    {
-                        ans2 *= x;
-                    }
+                    double ans2 = Factorial(10-2) / Factorial(10 - 2 - numCount2);
                     task2.answers.Add(String.Format("1/{0:0} ≈ {1:0.000000}", ans2, (1 / (double)ans2)));
                     return task2;
             }
@@ -147,29 +144,29 @@ namespace TaskGenerator
 
                 case 2:
                     Task task2 = new Task(2, 2);
-                   
-                    int whiteCount = random.Next(9, 15);
-                    int blueCount = random.Next(3, 5);
-                    int manCount = random.Next(5, whiteCount-2);
-                    
-                    int whiteTake = random.Next(1, Math.Min(whiteCount, manCount - 1));
-                    
-                    //Test for loop (луп залуп)
-                    while (manCount - whiteTake > blueCount)
-                        whiteTake = random.Next(1, Math.Min(whiteCount, manCount - 1));
 
-                    int blueTake = manCount - whiteTake;
+                    int belGrib = random.Next(7, 13);
+                    int gruGrib = random.Next(12, 18);
+                    int muhGrib = random.Next(4, 8);
+                    int gribs = belGrib + gruGrib + muhGrib;
+                    int razdal = random.Next(5, 8);
 
-                    task2.condition = "В зале имеется "+ whiteCount +" белых и " +blueCount+ " синих кресел." +
-                        " Случайным образом места занимают "+manCount+" человек. Найти вероятность того, что они займут: ";
-                    task2.questions.Add(whiteTake + " белых и " + blueTake + " синих кресел.");
-                    task2.questions.Add("Хотя бы одно синее кресло.");
-                    var res1= (C(whiteCount, whiteTake) * C(blueCount, blueTake)) / C((whiteCount + blueCount), manCount);
-                    var res2= 1 - (C(whiteCount, manCount) / C((whiteCount + blueCount), manCount));
+                    int muhRazdal = muhGrib - 2;
+                    int gruzdRazdal = random.Next(1, 3);
+                    int belRazdal = razdal - gruzdRazdal - 1;
+
+                    task2.condition = $"Дети собрали в лесу {belGrib} белых грибов, " +
+						$"{gruGrib} груздей и {muhGrib} мухоморов. Бабушка наудачу извлекает из корзины" +
+						$" {razdal} грибов. Какова вероятность того, что среди них: "; 
+                    task2.questions.Add($"{muhRazdal} мухомор{EndingNoun(muhRazdal)}.");
+                    task2.questions.Add($"{gruzdRazdal} грузд{EndingNoun(gruzdRazdal)} и {belRazdal} гриб{EndingNoun(belRazdal)} бел{EndingAdj(belRazdal)}");
+
+                    var res1 = (C(muhGrib,muhRazdal) * C(gribs - muhGrib, muhGrib - muhRazdal)) / (C(gribs, razdal));
+                    var res2 = (C(gruGrib, gruzdRazdal) * C(belGrib, belRazdal)) * C(gribs-gruGrib-belRazdal, razdal - gruzdRazdal - belRazdal) / (C(gribs, razdal));
                     //task2.answers.Add("C(" + whiteCount + "," + whiteTake + ")*C(" + blueCount + ", " + blueTake + ")/C(" + (whiteCount + blueCount) + ", " + manCount + " ) = " + (C(whiteCount, whiteTake) * C(blueCount, blueTake)) / C((whiteCount + blueCount), manCount));
-                    task2.answers.Add(String.Format("C({0:0},{1:0})*C({2:0},{3:0})/C({4:0},{5:0}) ≈ {6:0.0000}", whiteCount, whiteTake, blueCount, blueTake, whiteCount + blueCount, manCount, res1));
+                    task2.answers.Add(String.Format("C({0:0},{1:0})*C({2:0},{3:0})/C({4:0},{5:0}) ≈ {6:0.0000}", muhGrib, muhRazdal, gribs - muhGrib, muhGrib - muhRazdal, gribs , razdal, res1));
                     //task2.answers.Add("1 - C(" + whiteCount + "," + manCount + ")/C(" + (whiteCount + blueCount) + "," + manCount + ") = " + (1 - C(whiteCount, manCount) / C((whiteCount + blueCount), manCount)));
-                    task2.answers.Add(String.Format("1-C({0:0},{1:0})/C({2:0},{3:0}) ≈ {4:0.0000}", whiteCount, manCount, whiteCount + blueCount, manCount, res2));
+                    task2.answers.Add(String.Format("C({0:0},{1:0})*C({2:0},{3:0})*C({4:0},{5:0}) / C({6:0},{7:0})≈ {8:0.0000}", gruGrib, gruzdRazdal , belGrib, belRazdal, gribs - gruGrib - belRazdal, razdal - gruzdRazdal - belRazdal, gribs, razdal, res2));
                     return task2;
             }
             throw new ArgumentException();
@@ -1255,8 +1252,60 @@ namespace TaskGenerator
             if (n <= 0) return 1;
             return n * Factorial(n - 1);
 		}
-        private static double C(double p, double q) {
-            return Convert.ToDouble(Factorial(p)) / Convert.ToDouble((Factorial(q) * Factorial(p - q)));
+        private static double C(double n, double k) {
+            return Convert.ToDouble(Factorial(n)) / Convert.ToDouble((Factorial(k) * Factorial(n - k)));
 		}
+
+        public static string EndingNoun(int number)
+        {
+            string singularForm = ""; 
+            string pluralForm1 = "а";
+            string pluralForm2 = "ов";
+            number = Math.Abs(number) % 100;
+            int remainder = number % 10;
+
+            if (number > 10 && number < 20)
+            {
+                return pluralForm2;
+            }
+
+            if (remainder > 1 && remainder < 5)
+            {
+                return pluralForm1;
+            }
+
+            if (remainder == 1)
+            {
+                return singularForm;
+            }
+
+            return pluralForm2;
+        }
+        public static string EndingAdj(int number)
+        {
+            string singularForm = "ый";
+            string pluralForm1 = "ых";
+            string pluralForm2 = "ых";
+            number = Math.Abs(number) % 100;
+            int remainder = number % 10;
+
+            if (number > 10 && number < 20)
+            {
+                return pluralForm2;
+            }
+
+            if (remainder > 1 && remainder < 5)
+            {
+                return pluralForm1;
+            }
+
+            if (remainder == 1)
+            {
+                return singularForm;
+            }
+
+            return pluralForm2;
+        }
+
     }
 }

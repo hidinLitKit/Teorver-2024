@@ -92,7 +92,7 @@
 					<RowDefinition Height="30"/>
 					<RowDefinition Height="30"/>
 				</Grid.RowDefinitions>
-				<TextBlock Grid.Row="0" Grid.Column="0" Text="Комбинаторика" Grid.ColumnSpan="3"></TextBlock>
+				<TextBlock Grid.Row="0" Grid.Column="0" Text="Комбинаторика" Grid.ColumnSpan="3" FontFamily="{StaticResource Inter}" Foreground="{StaticResource TextBrush}" ></TextBlock>
 				<CheckBox FlowDirection="LeftToRight" x:Name="Task1" Grid.Column="0" Grid.Row="1">
 					<TextBlock FlowDirection="LeftToRight" Text="1" />
 					<CheckBox.LayoutTransform>
@@ -106,7 +106,7 @@
 					</CheckBox.LayoutTransform>
 				</CheckBox>
 
-				<TextBlock Grid.Row="2" Grid.Column="0" Text="Случайные события" Grid.ColumnSpan="3"></TextBlock>
+				<TextBlock Grid.Row="2" Grid.Column="0" Text="Случайные события" Grid.ColumnSpan="3" Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
 				<CheckBox FlowDirection="LeftToRight" x:Name="Task3" Grid.Column="0" Grid.Row="3">
 					<TextBlock FlowDirection="LeftToRight" Text="1" />
 					<CheckBox.LayoutTransform>
@@ -128,7 +128,7 @@
 
 
 
-				<TextBlock Grid.Row="4" Grid.Column="0" Text="Формула полной вероятности" Grid.ColumnSpan="5"></TextBlock>
+				<TextBlock Grid.Row="4" Grid.Column="0" Text="Формула полной вероятности" Grid.ColumnSpan="5" Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
 				<CheckBox FlowDirection="LeftToRight" x:Name="Task6" Grid.Column="0" Grid.Row="5">
 					<TextBlock FlowDirection="LeftToRight" Text="1" />
 					<CheckBox.LayoutTransform>
@@ -149,7 +149,7 @@
 				</CheckBox>
 
 
-				<TextBlock Grid.Row="6" Grid.Column="0" Text="Схема Бернулли " Grid.ColumnSpan="5"></TextBlock>
+				<TextBlock Grid.Row="6" Grid.Column="0" Text="Схема Бернулли " Grid.ColumnSpan="5"  Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
 				<CheckBox FlowDirection="LeftToRight" x:Name="Task9" Grid.Column="0" Grid.Row="7">
 					<TextBlock FlowDirection="LeftToRight" Text="1" />
 					<CheckBox.LayoutTransform>
@@ -170,7 +170,7 @@
 				</CheckBox>
 
 
-				<TextBlock Grid.Row="8" Grid.Column="0" Text="Дискретные случайные величины " Grid.ColumnSpan="5"></TextBlock>
+				<TextBlock Grid.Row="8" Grid.Column="0" Text="Дискретные случайные величины " Grid.ColumnSpan="5" Foreground="{StaticResource TextBrush}"  FontFamily="{StaticResource Inter}"></TextBlock>
 				<CheckBox FlowDirection="LeftToRight" x:Name="Task12" Grid.Column="0" Grid.Row="9">
 					<TextBlock FlowDirection="LeftToRight" Text="1" />
 					<CheckBox.LayoutTransform>
@@ -197,7 +197,7 @@
 				</CheckBox>
 
 
-				<TextBlock Grid.Row="10" Grid.Column="0" Text="Важнейшие законы распределения " Grid.ColumnSpan="5"></TextBlock>
+				<TextBlock Grid.Row="10" Grid.Column="0" Text="Важнейшие законы распределения " Grid.ColumnSpan="5"  Foreground="{StaticResource TextBrush}"  FontFamily="{StaticResource Inter}"></TextBlock>
 				<CheckBox FlowDirection="LeftToRight" x:Name="Task16" Grid.Column="0" Grid.Row="11">
 					<TextBlock FlowDirection="LeftToRight" Text="1" />
 					<CheckBox.LayoutTransform>
@@ -216,7 +216,7 @@
 						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
 					</CheckBox.LayoutTransform>
 				</CheckBox>
-				<TextBlock Grid.Row="12" Grid.Column="0" Text="Выбрать всё " Grid.ColumnSpan="3"></TextBlock>
+				<TextBlock Grid.Row="12" Grid.Column="0" Text="Выбрать всё " Grid.ColumnSpan="3"  Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
 				<CheckBox FlowDirection="LeftToRight" x:Name="ChooseAll" Grid.Column="2" Grid.Row="12">
 					<CheckBox.LayoutTransform>
 						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
