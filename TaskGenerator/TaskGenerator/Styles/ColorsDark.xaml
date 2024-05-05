@@ -1,0 +1,31 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="Background">#36393f</Color>
+    <Color x:Key="Accent">#95a3f2</Color>
+    <Color x:Key="AccentDark">#95a3f2</Color>
+    <Color x:Key="Highlight">#40444b</Color>
+    <Color x:Key="HighlightDark">#40444b</Color>
+    <Color x:Key="Text">#FFFFFF</Color>
+    <Color x:Key="CardBackground">#40444b</Color>
+    <Color x:Key="Disable">#B1B1B1</Color>
+    <Color x:Key="Shadow">#333333</Color>
+
+    <SolidColorBrush x:Key="BackgroundBrush">#36393f</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentBrush">#414675</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentDarkBrush">#414675</SolidColorBrush>
+
+    <SolidColorBrush x:Key="HighlightBrush">#42464d</SolidColorBrush>
+    <SolidColorBrush x:Key="HighlightDarkBrush">#40444b</SolidColorBrush>
+    <SolidColorBrush x:Key="TextBrush">#FFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="CardBackgroundBrush">#40444b</SolidColorBrush>
+    <SolidColorBrush x:Key="DisableBrush">#B1B1B1</SolidColorBrush>
+
+    <ImageSource x:Key="Refresh">Images/refreshdark.png</ImageSource>
+    <ImageSource x:Key="Change">Images/replacedark.png</ImageSource>
+    <ImageSource x:Key="ZedNull">Images/ZedNull.jpg</ImageSource>
+    <ImageSource x:Key="Jakepps">Images/Jakepps.jpg</ImageSource>
+    <ImageSource x:Key="StarProxima">Images/StarProxima.jpg</ImageSource>
+    <ImageSource x:Key="AppIcon">Images/AppIcon.png</ImageSource>
+
+</ResourceDictionary>

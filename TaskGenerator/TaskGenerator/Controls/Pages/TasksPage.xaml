@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="TaskGenerator.Controls.Pages.TasksPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2006" 
+             xmlns:local="clr-namespace:TaskGenerator.Controls.Pages"
+             xmlns:view="clr-namespace:TaskGenerator.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="600">
+	<Grid Height="Auto" x:Name="source">
+		<Grid.Background>
+			<SolidColorBrush Color="{StaticResource Background}" Opacity="0"/>
+		</Grid.Background>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition x:Name="row2" Height="1*"/>
+		</Grid.RowDefinitions>
+
+		<Label x:Name="variant" 
+      Content=""
+      FontFamily="{StaticResource Inter}"
+      FontSize="32"
+			Foreground="{StaticResource TextBrush}"
+      FontWeight="Bold"
+			MaxWidth="600"
+      Margin="12,12,12,12" FontStyle="Normal" FontStretch="Condensed"
+      />
+
+		<ListView 
+			Height="Auto"
+			Grid.Row="1"
+			x:Name="listView"
+			ItemsSource="{Binding}" 
+			Width="Auto" 
+			Background="Transparent"
+			BorderThickness="0"
+			Padding="0"
+			Margin="0"
+			VirtualizingPanel.IsVirtualizing="True"
+			VirtualizingPanel.ScrollUnit="Pixel"
+			VirtualizingPanel.VirtualizationMode="Recycling"
+			VirtualizingPanel.CacheLengthUnit="Item"
+			ScrollViewer.VerticalScrollBarVisibility="Visible"
+            ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+			Template="{StaticResource ListViewNewTemplate}"
+			VirtualizingPanel.CacheLength="1">
+
+			<ListView.Resources>
+				<Style TargetType="ListViewItem">
+					<Style.Resources>
+						<!-- SelectedItem with focus -->
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                       Color="Transparent" />
+
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrush}"
+                       Color="Transparent" />
+						<!-- SelectedItem without focus -->
+						<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                       Color="Transparent" />
+						<!-- SelectedItem text foreground -->
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                       Color="Black" />
+					</Style.Resources>
+					<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+				</Style>
+			</ListView.Resources>
+			<ListView.ItemContainerStyle>
+				<Style TargetType="ListViewItem">
+					<Setter Property="Padding" Value="0"/>
+					<Setter Property="Margin" Value="0"/>
+					<Setter Property="BorderThickness" Value="0"/>
+					<Setter Property="IsTabStop" Value="False" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="ListBoxItem">
+								<ContentPresenter/>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+
+					<Style.Resources>
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+					</Style.Resources>
+
+
+
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ListViewItem Style="{StaticResource test}">
+						<view:TaskCard 
+            Padding="12,6,24,6"
+            task="{Binding}" 
+            Width="{Binding ActualWidth, ElementName=listView}"/>
+					</ListViewItem>
+
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</Grid>
+
+</UserControl>
