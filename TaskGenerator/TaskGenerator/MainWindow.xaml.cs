@@ -6,6 +6,7 @@ using Xceed;
 using Xceed.Words.NET;
 using Xceed.Document.NET;
 using System.Drawing;
+using System.Windows.Controls;
 
 namespace TaskGenerator
 {
@@ -36,8 +37,9 @@ namespace TaskGenerator
         public MainWindow()
         {
             InitializeComponent();
-
+            Application.Current.MainWindow.Height = 700;
             generator.generateBtn.Click += onClick;
+            generator.ChooseAll.Click += onChooseAll;
             variants.variantChange += changeVariant;
             tasks.parentWindow = this;
         }
@@ -47,8 +49,17 @@ namespace TaskGenerator
             var tasksList = new List<int>(); 
             try {
                 count = Convert.ToInt32(generator.countField.Text);
-                tasksList = Import.GetTaskTypesFromString(generator.tasksField.Text);
-                if (tasksList.FindAll(x => x <= 0 || x > 21).Count != 0) throw new FormatException();
+                for (int i = 1; i < 19; i++)
+                {
+                    var obj = generator.FindName("Task" + i);
+                    if (obj is CheckBox checkbox)
+                    {
+                        tasksList.Add((bool)checkbox.IsChecked? 1 : 0);
+
+                    }
+                }
+                //tasksList = Import.GetTaskTypesFromString(generator.tasksField.Text);
+                //if (tasksList.FindAll(x => x <= 0 || x > 21).Count != 0) throw new FormatException();
             }
             catch {
                 MessageBox.Show("Введены некорректные данные", "Ошибка");
@@ -91,6 +102,20 @@ namespace TaskGenerator
             win.Show();
 
         }
+        private void onChooseAll(object sender, RoutedEventArgs e)
+        {
+            bool _isChecked = (bool) generator.ChooseAll.IsChecked;
+            for (int i = 1; i < 19; i++)
+            {
+                var obj = generator.FindName("Task" + i);
+                if (obj is CheckBox checkbox)
+                {
+                    checkbox.IsChecked = _isChecked;
+
+                }
+            }
+        }
+
 
         
     }

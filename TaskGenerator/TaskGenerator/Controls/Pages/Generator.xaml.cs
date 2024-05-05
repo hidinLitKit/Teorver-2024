@@ -35,38 +35,5 @@ namespace TaskGenerator.Controls.Pages
 
 		}
 
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			//Console.WriteLine("OpenFileDialog");
-			openFileDialog.Filter = "Text files (*.doc; *.docx)|*.doc; *.docx";
-
-			if (openFileDialog.ShowDialog() == true)
-            {
-				importFileLabel.Content = openFileDialog.SafeFileName;
-				MainWindow mainWindow = ((MainWindow)Application.Current.MainWindow);
-				mainWindow.students = new MainWindow.Students(openFileDialog.FileName);
-				int studentsCount = mainWindow.students.Count;
-				countField.Text = studentsCount.ToString();
-				countField.Foreground = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
-				countField.IsReadOnly = true;
-				countField.Focusable = false;
-			}
-			
-			
-			//countField.IsEnabled = false;
-		}
-
-        private void btnDeleteFile_Click(object sender, RoutedEventArgs e)
-        {
-			importFileLabel.Content = "Отсутствует";
-			((MainWindow)Application.Current.MainWindow).students = new MainWindow.Students();
-
-			countField.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-			countField.IsReadOnly = false;
-			countField.Focusable = true;
-
-			//countField.IsEnabled = true;
-		}
 	}
 }
