@@ -67,9 +67,9 @@ namespace TaskGenerator
                     return CreateTaskType17(ref random, subtype == 0 ? randomSubtype : subtype);
                 case 18:
                     return CreateTaskType18(ref random, subtype == 0 ? randomSubtype : subtype);
-                case 19:
+               /* case 19:
                     return CreateTaskType19(ref random, subtype == 0 ? randomSubtype : subtype);
-               /* case 20:
+                case 20:
                     return CreateTaskType20(ref random, subtype == 0 ? randomSubtype : subtype);
                 case 21:
                     return CreateTaskType21(ref random, subtype == 0 ? randomSubtype : subtype); */
@@ -922,7 +922,7 @@ namespace TaskGenerator
             return task2;
         }
 
-        private static Task CreateTaskType16(ref Random random, int subtype)
+        /*private static Task CreateTaskType19(ref Random random, int subtype)
         {
             switch (subtype)
             {
@@ -983,7 +983,7 @@ namespace TaskGenerator
         static double fun(double x)
         {
             return x * x * x / 3.0 - 3 * x * x + 8 * x;
-        }
+        } */
         /* private static Task CreateTaskType20(ref Random random, int subtype)
         {
             switch (subtype)
@@ -1154,7 +1154,7 @@ namespace TaskGenerator
         }
         */
 
-        private static Task CreateTaskType17(ref Random random, int subtype)
+        private static Task CreateTaskType16(ref Random random, int subtype)
         {
             switch (subtype)
             {
@@ -1189,7 +1189,7 @@ namespace TaskGenerator
             throw new ArgumentException();
         }
 
-        private static Task CreateTaskType18(ref Random random, int subtype)
+        private static Task CreateTaskType17(ref Random random, int subtype)
         {
             switch (subtype)
             {
@@ -1219,7 +1219,7 @@ namespace TaskGenerator
             throw new ArgumentException();
         }
 
-        private static Task CreateTaskType19(ref Random random, int subtype)
+        private static Task CreateTaskType18(ref Random random, int subtype)
         {
             switch (subtype)
             {
