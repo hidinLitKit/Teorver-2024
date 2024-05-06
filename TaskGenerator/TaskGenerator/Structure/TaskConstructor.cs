@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 namespace TaskGenerator
 {
    
@@ -68,10 +69,10 @@ namespace TaskGenerator
                     return CreateTaskType18(ref random, subtype == 0 ? randomSubtype : subtype);
                 case 19:
                     return CreateTaskType19(ref random, subtype == 0 ? randomSubtype : subtype);
-                case 20:
+               /* case 20:
                     return CreateTaskType20(ref random, subtype == 0 ? randomSubtype : subtype);
                 case 21:
-                    return CreateTaskType21(ref random, subtype == 0 ? randomSubtype : subtype);
+                    return CreateTaskType21(ref random, subtype == 0 ? randomSubtype : subtype); */
             }
             throw new NotImplementedException();
         }
@@ -191,13 +192,15 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     Task task2 = new Task(3, 2);
-                    task2.condition = "Пусть А, В, С – случайные события, выраженные подмножествами одного и того же множества элементарных событий. В алгебре событий {А, В, С} запишите следующее:";
-                    task2.questions.Add("Из данных событий произошло только А.");
-                    task2.questions.Add("Произошло хотя бы одно из данных событий.");
-                    task2.questions.Add("Произошло более одного из данных событий.");
-                    task2.answers.Add("A•¬B•¬C");
-                    task2.answers.Add("¬(¬A•¬B•¬C)");
-                    task2.answers.Add("¬(¬A•¬B•¬C + A•¬B•¬C + ¬A•B•¬C + ¬A•¬B•C)");
+                    task2.condition = " Пусть A, B, C — случайные события, выраженные" +
+                        " подмножествами одного и того же множества элементарных событий." +
+                        " В алгебре событий запишите следующее:";
+                    task2.questions.Add(" D — произошло два и только два из данных событий;");
+                    task2.questions.Add("E — произошли все три события; ");
+                    task2.questions.Add("E — произошли все три события; ");
+                    task2.answers.Add("A∩B∩¬C ∪ A∩¬B∩C ∪ ¬A∩B∩C");
+                    task2.answers.Add("A∩B∩C");
+                    task2.answers.Add("1 - A∩B∩C");
                     return task2;
             }
             throw new ArgumentException();
@@ -230,14 +233,13 @@ namespace TaskGenerator
                     var ver1 = (random.Next(1, 10)) / 10.0;
                     var ver2 = (random.Next(1, 10)) / 10.0;
                     Task task2 = new Task(4, 2);
-                    task2.condition = "Два баскетболиста делают по одному броску мячом по корзине. Для первого спортсмена вероятность " +
-                        "попадания равна " + ver1 + ", для второго – " + ver2 + ". Какова вероятность того, что в корзину попадут:";
-                    task2.questions.Add("Оба игрока.");
-                    task2.questions.Add("Хотя бы один игрок.");
-                    task2.questions.Add("Попадет только первый спортсмен.");
+                    task2.condition = $"Студент выполняет самостоятельную работу по математике, состоящую из двух задач на разные темы.Задачу на тему «Классическая вероятность» он решает правильно с вероятностью {ver1}, а на тему «Гипергеометрическое распределение» — с вероятностью {ver2}.Какова вероятность того, что из двух задач:";
+                    task2.questions.Add("он правильно решит обе;");
+                    task2.questions.Add("правильно решит хотя бы одну;");
+                    task2.questions.Add("не решит задачу на первую тему?");
                     task2.answers.Add(string.Format("{0:0.00}",ver1 * ver2));
                     task2.answers.Add(string.Format("{0:0.00}",1 - (1 - ver1) * (1 - ver2)));
-                    task2.answers.Add(string.Format("{0:0.00}",ver1 * (1 - ver2)));
+                    task2.answers.Add(string.Format("{0:0.00}",ver2 * (1 - ver1)));
 
                     return task2;
             }
@@ -265,14 +267,11 @@ namespace TaskGenerator
                 case 2:
                     
                     var ver1 = random.Next(1, 10) / 10.0;
-                    var ver2 = random.Next(1, 15) / 15.0;
+                    var ver2 = random.Next(1, 10) / 10.0;
 
                     Task task2 = new Task(5, 2);
-                    task2.condition = "Экзаменационный билет по теории вероятностей содержит три вопроса (по одному из трех разделов). " +
-                        "Студент знает " + ver1*10 + " из 10 вопросов первого раздела, " + ver2*15 + " из 15 – " +
-                        "второго и все 20 вопросов третьего раздела. Преподаватель ставит положительную оценку при ответе хотя бы на два вопроса билета. " +
-                        "Какова вероятность того, что студент не сдаст экзамен?";
-                    task2.answers.Add(string.Format("{0:0.000}",(1-ver1)*(1-ver2)));
+                    task2.condition = $"Детеныш хомячка в неволе погибает в течение первых двух недель жизни от генетических дефектов с вероятностью {ver1}, а от инфекции — с вероятностью {ver2}.За первые две недели погибли 3 детеныша.Какова вероятность, что большинство из них погибло от инфекции?";
+                    task2.answers.Add(string.Format("{0:0.000}",(ver2*ver2*ver2)+3*(ver1*ver2*ver2)));
                     return task2;
             }
             throw new ArgumentException();
@@ -298,24 +297,16 @@ namespace TaskGenerator
 
                     return task1;
                 case 2:
-                    
-                    var ver1=random.Next(2,10);
-                    var ver2=random.Next(1,ver1-1);
+                    int days = 31; 
+                    var dayGood = random.Next(10, 20);
+                    var restDays = days - dayGood; 
 
                     Task task2 = new Task(6, 2);
 
-                    task2.condition = "Работа некоторого устройства прекращается, если из строя выходит 1 из " + ver1 + ". Последовательная замена " +
-                                      "каждого элемента новым производится до тех пор, пока устройство не начнет работать. " +
-                                      "Какова вероятность того, что придется заменить "+ver2+" элементов?";
-                    double an=1.0;
-
-                    while (ver2 != 0)
-                    {
-                        an *= ((double)ver2 / (double)ver1);
-                        ver1 -= 1;
-                        ver2 -= 1;
-                    }
-                    task2.answers.Add(string.Format("{0:0.000000}", an));
+                    task2.condition = $"В Омской области среднее число ясных дней в марте равно {dayGood}.Определить вероятность того, что первого и второго марта будет пасмурная погода.";
+                    var ans = (restDays / (float)days);
+                    ans *= ( (restDays - 1) / (float)(days - 1));
+                    task2.answers.Add(string.Format("{0:0}/{1:0} * {2:0}/{3:0} ≈ {4:0.000000}", restDays, days, restDays - 1, days - 1,ans));
                     return task2;
             }
             throw new ArgumentException();
@@ -343,20 +334,21 @@ namespace TaskGenerator
                     return task1;
 
                 case 2:
-                    
-                    var ver1 = Convert.ToDouble(random.Next(1, 8));
-                    var ver2 = Convert.ToDouble(random.Next(1, 10 - Convert.ToInt32(ver1) - 1));
-                    var ver3 = Convert.ToDouble(10 - ver1 - ver2);
-                    var ver4= Convert.ToDouble(random.Next(1, 10)) / 10;
-                    var ver5= Convert.ToDouble(random.Next(1, 10)) / 10;
-                    ver1 /= 10; ver2 /= 10; ver3 /= 10;
+
+                    int H1 = random.Next(60, 90);
+                    int H2 = 100 - H1;
+                    float p1 = random.Next(1, 4) / 10f;
+                    float p2 = random.Next(4, 7) / 10f;
+                    List<int> H = new List<int>() { H1, H2 };
+                    List<float> P = new List<float>() { p1, p2 };
+                    float ans = 0;
+                    for(int i = 0;i < H.Count; i++) ans += ( H[i] / 100f) * P[i];
                     Task task2 = new Task(7, 2);
-                    task2.condition = "В ночь перед экзаменом по математике студенту Дудкину с вероятностью " + ver1 + " снится экзаменатор, с вероятностью " + ver2 +
-                        " – тройной интеграл и с вероятностью " + ver3 + " то же, что и всегда. Если Дудкину снится преподаватель, " +
-                        "то экзамен он сдает с вероятностью " + ver4 + ", если тройной интеграл, то успех на экзамене ожидает его с " +
-                        "вероятностью " + ver5 + ". Если же Дудкину снится то же, что и всегда, то экзамен он точно «заваливает». " +
-                        "Какова вероятность, что Дудкин сдаст математику в ближайшую сессию?";
-                    task2.answers.Add((string.Format("{0:0.00}", ver1 * ver4 + ver2 * ver5)));
+                    task2.condition = "Прибор, установленный на борту самолета, может " +
+                        "работать в двух режимах: в условиях нормального крейсерского полета и в условиях перегрузки при взлете и посадке." +
+                        $"Крейсерский режим осуществляется в {H1}% всего времени полета, режим перегрузки — в {H2} %.Вероятность выхода прибора из строя за время полета в нормальном режиме равна {p1}, в условиях перегрузки — {p2}." +
+                        "Вычислить вероятность отказа прибора за время полета";
+                    task2.answers.Add((string.Format("{0:0.00}", ans)));
                     return task2;
             }
             throw new ArgumentException();
@@ -367,8 +359,6 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
-
                     var prob1 = Convert.ToDouble(random.Next(1, 20));
                     var prob2 = Convert.ToDouble(random.Next(1, 20));
                     var prob3 = Convert.ToDouble(random.Next(1, 20));
@@ -379,49 +369,30 @@ namespace TaskGenerator
 
                     task1.condition = "Электростанция оборудована генератором электрического тока, приводимым во вращение дизельным двигателем. " +
                         "Состояние оборудования и воспламенительные свойства дизельного топлива (цетановое число) таковы, " +
-                        "что при использовании в качестве топлива соляровых фракций прямой перегонки нефти генератор приходит в аварийное состояние с вероятностью " + 
+                        "что при использовании в качестве топлива соляровых фракций прямой перегонки нефти генератор приходит в аварийное состояние с вероятностью " +
                         prob1 + ", при использовании керосиновых фракций – с вероятностью " + prob2 + ", а при использовании газойлевых фракций – с вероятностью " + prob3 +
                         ". 26 апреля 1986 г. года электростанция исправно давала ток. Какова вероятность того, что в этот день дизельный двигатель работал на солярке, " +
                         "если тот или иной вид топлива используется с равной вероятностью?";
-                    
-                    task1.answers.Add(string.Format("{0:0.000000}", (1 - prob1)/((1 - prob1) + (1 - prob2) + (1 - prob3))));
+
+                    task1.answers.Add(string.Format("{0:0.000000}", (1 - prob1) / ((1 - prob1) + (1 - prob2) + (1 - prob3))));
                     return task1;
                 case 2:
+                    var A1 = random.Next(1, 5) / 10.0;
+                    var A2 = random.Next(1, 3) / 10.0;
+                    var A3 = 1 - A2 - A1;
+                    List<double> A = new List<double>() { A1, A2, A3 };
+                    var H = 1 / 3.0;
+
+                    var p = A.Sum() * H;
+                    var ans = (H * A2) / p;
+
+
                     Task task2 = new Task(8, 2);
-                    
 
-                    int[] percentWork = new int[3];
+                    task2.condition = $"Красная Шапочка, заблудившись в лесу, вышла на полянку, от которой в разные стороны ведут три дороги. Вероятность встретить Серого Волка на первой дороге " +
+                        $"равна {A1}, на второй — {A2}, на третьей — {A3}.Какова вероятность того, что Красная Шапочка пошла по второй дороге, если известно, что через час она уже была у бабушки?";
 
-                    percentWork[0] = random.Next(1, 12 + 1)*5;
-                    percentWork[1] = random.Next(1, 17 - percentWork[0]/5 + 1)*5;
-                    percentWork[2] = 100 - percentWork[0] - percentWork[1];
-
-                    double[] probFail = new double[4];
-                    for (int i = 0; i < 3; i++)
-                    {
-                        probFail[i] = Convert.ToDouble(random.Next(1, 10)) / 100.0;
-                        if (i == 1 && Math.Abs(probFail[i] - probFail[i - 1]) < 0.005) i--;
-                        if (i == 2 && (Math.Abs(probFail[i] - probFail[i - 1]) < 0.005 || Math.Abs(probFail[i] - probFail[i - 2]) < 0.005)) i--;
-                    }
-
-                    probFail[3] = percentWork[0] * probFail[0] + percentWork[1] * probFail[1] + percentWork[2] * probFail[2];
-
-                    task2.condition = "Три студента – Артём, Рустам и Сергей – на лабораторной работе по физике производят " +
-                        percentWork[0] + "%, "+ percentWork[1] + "% и " + percentWork[2] + "% всех измерений, допуская ошибки с вероятностями " +
-                        probFail[0] + ", " + probFail[1] + " и "+ probFail[2] + " соответственно. Преподаватель проверяет наугад выбранное " +
-                        "измерение и объявляет его ошибочным. Кто из трех студентов вероятнее всего сделал это измерение?";
-
-                    int studentInd = 0; double max = -1;
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if(percentWork[i]*probFail[i]/probFail[3] > max)
-                        {
-                            max = percentWork[i] * probFail[i] / probFail[3];
-                            studentInd = i;
-                        }
-                    }
-                    string student = studentInd == 0 ? "Артём" : studentInd == 1 ? "Рустам" : "Сергей";
-                    task2.answers.Add(student);
+                    task2.answers.Add(string.Format("{0:0.000000}", ans));
                     return task2;
             }
             throw new ArgumentException();
@@ -442,26 +413,23 @@ namespace TaskGenerator
 
                     return task1;
                 case 2:
-                    
-                    var ver1 = Convert.ToDouble(random.Next(1, 10))/10;
-                    var ver2=0.0;
-                    do
-                    {
-                        ver2 =Convert.ToDouble(random.Next(4, 100));
-                    }
-                    while (ver2 % 2 != 0);
+
+                    var ver1 = random.Next(1, 4);
+                    var ver2 = random.Next(1, 8);
+
                     Task task2 = new Task(9, 2);
-                    task2.condition = "Вероятность выхода из строя за время Т одного (любого) элемента равна " + ver1 + ". " +
-                        "Определить вероятность того, что за время Т из " + (int)ver2 + " элементов из строя выйдет:";
-                    task2.questions.Add("Половина.");
-                    task2.questions.Add("Меньше половины.");
-                    double ver3 = 1 - ver1;
-                    double x = ((ver2 / 2) * ver1 * ver3) / Math.Sqrt(ver2 * ver1 * ver3);
-                    double p = 1.0 / Math.Sqrt(ver2 * ver1 * ver3);
-                    task2.answers.Add(string.Format("{0:0.00}*ф({1:0.00})", p, x));
-                    double x1 = (1 - ver1 * ver3) / Math.Sqrt(ver2 * ver1 * ver3);
-                    double x2 = ((ver2 / 2 - 1) - ver1 * ver3) / Math.Sqrt(ver2 * ver1 * ver3);
-                    task2.answers.Add(string.Format("ф({0:0.00})-ф({1:0.00})", x2, x1));
+                    task2.condition = $"Что вероятнее: выиграть в шахматы у равного по силе противника в не менее {ver1}  партиях из 4 или в не менее {ver2} из 8?";
+                    double ans1 = 0;
+                    for(int i = ver1; i <= 4; i++)
+                    {
+                        ans1 += C(4, i) * Math.Pow(0.5, 4);
+                    }
+                    double ans2 = 0;
+                    for (int i = ver2; i <= 8; i++)
+                    {
+                        ans2 += C(8, i) * Math.Pow(0.5, 8);
+                    }
+                    task2.answers.Add( ans1 > ans2 ? "1" : "2");
                     return task2;
             }
             throw new ArgumentException();
@@ -499,24 +467,27 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     Task task2 = new Task(10, 2);
-                    
 
-                    double probFailure = random.Next(1, 7 + 1) * 5 / 100.0;
-                    int amount = random.Next(1, 10)*5;
 
-                    task2.condition = "Вероятность выхода из строя за время Т одного конденсатора равна " + probFailure + ". " +
-                        "Определить вероятность того, что за время Т из 100 конденсаторов, работающих независимо, выйдут из строя:";
-                    task2.questions.Add("Не менее " + amount + " конденсаторов.");
-                    task2.questions.Add("Ровно половина.");
-                    
-                    double x1 = (amount - 100* probFailure)/Math.Sqrt(100 * probFailure * (1 - probFailure));
-                    double x2 = (100 - 100 * probFailure) / Math.Sqrt(100 * probFailure * (1 - probFailure));
+                    double n = random.Next(175, 200);
+                    double k1 = random.Next(80, 100);
+                    double k2 = random.Next(105, 120);
+                    double k = random.Next(50, 70);
+                    double p = 1 / 2.0;
+
+                    var x1 = (k1 - n*p) / Math.Sqrt(n*p*p);
+                    var x2 = (k2 - n * p) / Math.Sqrt(n * p * p);
+                    var x3 = (k - n * p) / Math.Sqrt(n * p * p);
+
+
+                    task2.condition = $"Монета подбрасывается {n} раз.Найти вероятность того, что герб появится";
+                    task2.questions.Add($" не менее {k1} и не более {k2}раз");
+                    task2.questions.Add($" ровно {k} раз.");
 
                     task2.answers.Add(string.Format("Φ({0:0.00}) - Φ({1:0.00})", x2,x1));
 
-                    double k1 = 1.0/Math.Sqrt(100 * probFailure * (1 - probFailure));
-                    double k2 = (50 - 100 * probFailure) / Math.Sqrt(100 * probFailure * (1 - probFailure));
-                    task2.answers.Add(string.Format("{0:0.00} * φ({1:0.00})", k1,k2));
+
+                    task2.answers.Add(string.Format("1/{0:0.00} * φ({1:0.00})", Math.Sqrt(n * p *p),x3));
                     return task2;
             }
             throw new ArgumentException();
@@ -543,17 +514,17 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     Task task2 = new Task(11, 2);
-                    
-                    int allStudentsAmount = random.Next(1, 9 + 1) * 100;
-                    int studentsAmount = random.Next(2, 5 + 1);
-                    task2.condition = "На факультете обучается " + allStudentsAmount + " студентов. Какова вероятность того, что " +
-                        "31 декабря является днем рождения одновременно " + studentsAmount + " студентов данного факультета?";
+
+                    int n = random.Next(1800, 2200);
+                    double p = random.Next(1, 10) / 10000.0;
+                    double q = 1 - p;
+                    task2.condition = $" Аппаратура содержит {n} одинаково надежных элементов; вероятность отказа для каждого из них " +
+                        $"равна {p}.Какова вероятность отказа данной аппаратуры, если он наступает при отказе хотя бы одного элемента?";
                     //double x = (studentsAmount - allStudentsAmount * (1 / 365.0)) / Math.Sqrt(allStudentsAmount * (1 / 365.0) * (1 - 1 / 365.0));
                     //double k = 1 / Math.Sqrt(allStudentsAmount * (1 / 365.0) * (1 - 1 / 365.0));
                     // task2.answers.Add(string.Format("1/√("+ allStudentsAmount + "*(1/365)*(1-1/365)) * φ({0:0.00}) ≈ {1:0.00} * φ({0:0.00})", x, k));
-                    var l = (double)allStudentsAmount / 365.00;
-                    var ot = (Math.Pow(l, studentsAmount) / Factorial(studentsAmount)) * Math.Exp(-l);
-                    task2.answers.Add(string.Format("(({0:0.000}^{1:0})/{2:0}!) * e^(-{3:0.000}) ≈ {4:0.000}", l, studentsAmount, studentsAmount, l, ot));
+                    var ans = 1 - ((1 / Math.Sqrt(n*p*q))*0.3989);
+                    task2.answers.Add(string.Format("{0:0.000}", ans));
                     return task2;
             }
             throw new ArgumentException();
@@ -604,7 +575,7 @@ namespace TaskGenerator
                     return task1;
                   
                 case 2:
-                    Task task2 = new Task(12, 2);
+                    /*Task task2 = new Task(12, 2);
                     
                     double probDefective = random.Next(1,10)*5/100.0;
                     task2.condition = string.Format("Вероятность изготовления нестандартной детали равна {0:0.00}. Из партии контролер проверяет не более четырех деталей. " +
@@ -641,6 +612,45 @@ namespace TaskGenerator
                         fx[i] = fx[i - 1] + p[i];
                     task2.answers.Add(string.Format("\nM(X)={0:0.000} \nD(X)={1:0.000} \nσ(X)={2:0.000} \nF(X) = \n    ⎧ 0, x ≤ 0\n    ⎨ {3:0.000}, 0 < x ≤ 1\n    ⎨ {4:0.000}, 1 < x ≤ 2\n    ⎨ {5:0.000}, 2 < x ≤ 3\n    ⎨ {6:0.000}, 3 < x ≤ 4\n    ⎩ 1, 4 < x",
                         mx, dx, Math.Sqrt(dx), fx[0], fx[1], fx[2], fx[3]));
+                    return task2;*/
+                    Task task2 = new Task(12, 1);
+
+
+                    var _prob = random.Next(3, 7) / 10.0;
+
+                    task2.condition = "Вероятность поражения цели при одном выстреле равна " + _prob + ".";
+                    task2.questions.Add(". Стрелку последовательно выдаются патроны, пока он не промахнется, количество выдаваемых патронов ограниченно четырьмя.");
+                    task2.questions.Add("Найти M(X), D(X), σ(X), F(X) числа выстрелов до первого поражения цели.");
+                    task2.questions.Add("Построить график F(X).");
+
+                    var _k1 = _prob;
+                    var _k2 = (1 - _prob) * _prob;
+                    var _k3 = (1 - _prob) * (1 - _prob) * _prob;
+                    var _k4 = (1 - _prob) * (1 - _prob) * (1 - _prob) * _prob;
+                    var _k5 = (1 - _prob) * (1 - _prob) * (1 - _prob) * (1 - _prob);
+
+                    var _MX = 1 * _k1 + 2 * _k2 + 3 * _k3 + 4 * _k4;
+                    var _DX = 1 * _k1 + 4 * _k2 + 9 * _k3 + 16 * _k4 - Math.Pow(_MX, 2);
+
+                    task2.answers.Add("\n" +
+                        "P(x = 0) = " + String.Format("{0:0.0000}", _k1) + "\n" +
+                        "P(x = 1) = " + String.Format("{0:0.0000}", _k2) + "\n" +
+                        "P(x = 2) = " + String.Format("{0:0.0000}", _k3) + "\n" +
+                        "P(x = 3) = " + String.Format("{0:0.0000}", _k4) + "\n" +
+                        "P(x = 4) = " + String.Format("{0:0.0000}", _k5)
+                    );
+                    task2.answers.Add("\n" +
+                        "M(X) = " + String.Format("{0:0.0000}", _MX) + "\n" +
+                        "D(X) = " + String.Format("{0:0.0000}", _DX) + "\n" +
+                        "σ(X) = " + String.Format("{0:0.0000}", Math.Sqrt(_DX)) + "\n" +
+                        "F(X) = \n" +
+                        "    ⎧ 0, x ≤ 0\n" +
+                        "    ⎨ " + String.Format("{0:0.0000}", _k1) + ", 0 < x ≤ 1\n" +
+                        "    ⎨ " + String.Format("{0:0.0000}", _k1 + _k2) + ", 1 < x ≤ 2\n" +
+                        "    ⎨ " + String.Format("{0:0.0000}", _k1 + _k2 + _k3) + ", 2 < x ≤ 3\n" +
+                        "    ⎨ " + String.Format("{0:0.0000}", _k1 + _k2 + _k3 + _k4) + ", 3 < x ≤ 4\n" +
+                        "    ⎩ " + String.Format("{0:0.0000}", _k1 + _k2 + _k3 + _k4 + _k5) + ", 4 < x"
+                    );
                     return task2;
             }
             throw new ArgumentException();
@@ -688,17 +698,19 @@ namespace TaskGenerator
                 case 2:
                     Task task2 = new Task(13, 2);
                     
-                    int childAmount = random.Next(3, 6 + 1);
-                    task2.condition = "Предполагая одинаковой вероятность рождения мальчика и девочки, составить ряд распределения случайной величины X, " +
-                        "которая выражает число мальчиков в семье, имеющей " + childAmount + " детей. Найти M(X) и D(X) этой случайной величины.";
+                    int n = random.Next(5, 10);
+                    double ver = random.Next(6, 9) / 10.0;
+                    task2.condition = $"Составить ряд распределения дискретной случайной величины X — числа отказов элемента некоторо гоустройства " +
+                        $"в {n} независимых опытах, если вероятность отказа элемента в каждом опыте" +
+                        $" равна {ver}.Найти M(X) и D(X).";
 
-                    double[] p = new double[childAmount + 1];
+                    double[] p = new double[n + 1];
                     for (int i = 0; i < p.Length; i++)
-                        p[i] = C(childAmount, i) * Math.Pow(0.5, childAmount);
+                        p[i] = C(n, i) * Math.Pow(ver, n);
 
                     string str = "";
                     for (int i = 0; i < p.Length; i++)
-                        str += "P(x=" + i + ")=C(" + childAmount + "," + i + ")*0.5^" + childAmount + "=" + p[i] + "\n";
+                        str += "P(x=" + i + ")=C(" + n + "," + i + ")*0.5^" + n + "=" + p[i] + "\n";
                     task2.answers.Add(str);
                     double mx2 = 0;
                     for (int i = 1; i <= 4; i++)
@@ -746,18 +758,13 @@ namespace TaskGenerator
                 case 2:
                     Task task2 = new Task(14, 2);
 
-                    double probDamage = random.Next(1, 2 + 1) * 10 / 10000.0;
-                    if(random.Next(0, 1 +1) == 0)
-                    {
-                        probDamage = random.Next(4, 5 + 1) * 10 / 10000.0;
-                    }
-                    int lampAmount = random.Next(1, 5 + 1) * 1000 / (int)(probDamage * 1000);
+                    
                     //double probDamage = random.Next(1, 3 + 1) * 10 / 10000.0;
-                    task2.condition = "Торговая база получила " + lampAmount + " электрических лампочек. Вероятность повреждения электролампочки в пути равна " + probDamage + ". ";
+                    task2.condition = " Рукопись объемом в 1000 страниц машинописного текста содержит 1000 опечаток.";
                     task2.questions.Add("Составить ряд распределения числа лампочек, поврежденных в пути.");
                     task2.questions.Add("Найти M(X) этой случайной величины.");
-                    task2.answers.Add(string.Format("Pn(m) = {0:0.0}^m * 1/m! * e^(-{0:0.0})", lampAmount * probDamage));
-                    task2.answers.Add(string.Format("M(X) = {0:0.0}", lampAmount * probDamage));
+                    task2.answers.Add(string.Format("Pn(m) = {0:0}^m * 1/m! * e^(-{0:0}), где m = 0,...k,...n = 1000", 1));
+                    task2.answers.Add(string.Format("M(X) = Σ (i = 0, ∞) ( mi*{0:0}^i * 1* e^(-{0:0} )/ i!", 1));
                     return task2;
             }
             throw new ArgumentException();
@@ -977,7 +984,7 @@ namespace TaskGenerator
         {
             return x * x * x / 3.0 - 3 * x * x + 8 * x;
         }
-        private static Task CreateTaskType17(ref Random random, int subtype)
+        /* private static Task CreateTaskType20(ref Random random, int subtype)
         {
             switch (subtype)
             {
@@ -1062,7 +1069,7 @@ namespace TaskGenerator
         {
             return ((-(x * x) - 5) / 6.0 + x + 1.0 / 3.0);
         }
-        private static Task CreateTaskType18(ref Random random, int subtype)
+        private static Task CreateTaskType21(ref Random random, int subtype)
         {
             switch (subtype)
             {
@@ -1145,8 +1152,9 @@ namespace TaskGenerator
             }
             throw new ArgumentException();
         }
+        */
 
-        private static Task CreateTaskType19(ref Random random, int subtype)
+        private static Task CreateTaskType17(ref Random random, int subtype)
         {
             switch (subtype)
             {
@@ -1181,7 +1189,7 @@ namespace TaskGenerator
             throw new ArgumentException();
         }
 
-        private static Task CreateTaskType20(ref Random random, int subtype)
+        private static Task CreateTaskType18(ref Random random, int subtype)
         {
             switch (subtype)
             {
@@ -1211,7 +1219,7 @@ namespace TaskGenerator
             throw new ArgumentException();
         }
 
-        private static Task CreateTaskType21(ref Random random, int subtype)
+        private static Task CreateTaskType19(ref Random random, int subtype)
         {
             switch (subtype)
             {
