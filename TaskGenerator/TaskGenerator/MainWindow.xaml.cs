@@ -49,7 +49,7 @@ namespace TaskGenerator
             var tasksList = new List<int>(); 
             try {
                 count = Convert.ToInt32(generator.countField.Text);
-                for (int i = 1; i < 19; i++)
+                for (int i = 1; i < 22; i++)
                 {
                     var obj = generator.FindName("Task" + i);
                     if (obj is CheckBox checkbox)
