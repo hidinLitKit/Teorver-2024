@@ -4,18 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TaskGenerator.Controls.Pages"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="240">
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition/>
-			<RowDefinition Height="60"/>
-		</Grid.RowDefinitions>
+             mc:Ignorable="d" d:DesignWidth="240" Height="658">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
 
-		<StackPanel 
+        <StackPanel 
     Background="{StaticResource BackgroundBrush}"
     >
-			<Label 
+            <Label 
       Content="Генерация"
       FontFamily="{StaticResource Inter}"
       FontSize="32"
@@ -24,7 +23,7 @@
       Margin="12,12,12,12" FontStyle="Normal" FontStretch="Condensed"
       />
 
-			<Label 
+            <Label 
       FontFamily="{StaticResource Inter}"
       Content="Количество вариантов:"
       FontSize="16"
@@ -34,7 +33,7 @@
       Margin="12,0,12,0"
       />
 
-	<TextBox
+            <TextBox
           x:Name="countField"
           FontFamily="{StaticResource Inter}"
           UseLayoutRounding = "True"
@@ -46,7 +45,7 @@
           FontWeight="SemiBold"
           Style="{StaticResource TextFieldStyle}"/>
 
-	<!--<Label 
+            <!--<Label 
         FontFamily="{StaticResource Inter}"
         Content="Номера задач:"
         Foreground="{StaticResource TextBrush}"
@@ -67,169 +66,192 @@
       Style="{StaticResource TextFieldStyle}"
       />  -->
 
-			<Grid Height="387" x:Name="CheckboxContainer" >
-				
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="40"/>
-					<ColumnDefinition Width="40"/>
-					<ColumnDefinition Width="40"/>
-					<ColumnDefinition Width="40"/>
-					<ColumnDefinition Width="40"/>
-					<ColumnDefinition Width="40"/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-					<RowDefinition Height="30"/>
-				</Grid.RowDefinitions>
-				<TextBlock Grid.Row="0" Grid.Column="0" Text="Комбинаторика" Grid.ColumnSpan="3" FontFamily="{StaticResource Inter}" Foreground="{StaticResource TextBrush}" ></TextBlock>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task1" Grid.Column="0" Grid.Row="1">
-					<TextBlock FlowDirection="LeftToRight" Text="1" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task2" Grid.Column="1" Grid.Row="1">
-					<TextBlock FlowDirection="LeftToRight" Text="2" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
+            <Grid x:Name="CheckboxContainer" >
 
-				<TextBlock Grid.Row="2" Grid.Column="0" Text="Случайные события" Grid.ColumnSpan="3" Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task3" Grid.Column="0" Grid.Row="3">
-					<TextBlock FlowDirection="LeftToRight" Text="1" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task4" Grid.Column="1" Grid.Row="3">
-					<TextBlock FlowDirection="LeftToRight" Text="2" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task5" Grid.Column="2" Grid.Row="3">
-					<TextBlock FlowDirection="LeftToRight" Text="3" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+<RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Комбинаторика" Grid.ColumnSpan="3" FontFamily="{StaticResource Inter}" Foreground="{StaticResource TextBrush}" ></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task1" Grid.Column="0" Grid.Row="1">
+                    <TextBlock FlowDirection="LeftToRight" Text="1" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task2" Grid.Column="1" Grid.Row="1">
+                    <TextBlock FlowDirection="LeftToRight" Text="2" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
 
-
-
-				<TextBlock Grid.Row="4" Grid.Column="0" Text="Формула полной вероятности" Grid.ColumnSpan="5" Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task6" Grid.Column="0" Grid.Row="5">
-					<TextBlock FlowDirection="LeftToRight" Text="1" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task7" Grid.Column="1" Grid.Row="5">
-					<TextBlock FlowDirection="LeftToRight" Text="2" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task8" Grid.Column="2" Grid.Row="5">
-					<TextBlock FlowDirection="LeftToRight" Text="3" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Случайные события" Grid.ColumnSpan="3" Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task3" Grid.Column="0" Grid.Row="3">
+                    <TextBlock FlowDirection="LeftToRight" Text="1" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task4" Grid.Column="1" Grid.Row="3">
+                    <TextBlock FlowDirection="LeftToRight" Text="2" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task5" Grid.Column="2" Grid.Row="3">
+                    <TextBlock FlowDirection="LeftToRight" Text="3" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
 
 
-				<TextBlock Grid.Row="6" Grid.Column="0" Text="Схема Бернулли " Grid.ColumnSpan="5"  Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task9" Grid.Column="0" Grid.Row="7">
-					<TextBlock FlowDirection="LeftToRight" Text="1" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task10" Grid.Column="1" Grid.Row="7">
-					<TextBlock FlowDirection="LeftToRight" Text="2" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task11" Grid.Column="2" Grid.Row="7">
-					<TextBlock FlowDirection="LeftToRight" Text="3" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Формула полной вероятности" Grid.ColumnSpan="5" Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task6" Grid.Column="0" Grid.Row="5">
+                    <TextBlock FlowDirection="LeftToRight" Text="1" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task7" Grid.Column="1" Grid.Row="5">
+                    <TextBlock FlowDirection="LeftToRight" Text="2" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task8" Grid.Column="2" Grid.Row="5">
+                    <TextBlock FlowDirection="LeftToRight" Text="3" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
 
 
-				<TextBlock Grid.Row="8" Grid.Column="0" Text="Дискретные случайные величины " Grid.ColumnSpan="5" Foreground="{StaticResource TextBrush}"  FontFamily="{StaticResource Inter}"></TextBlock>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task12" Grid.Column="0" Grid.Row="9">
-					<TextBlock FlowDirection="LeftToRight" Text="1" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task13" Grid.Column="1" Grid.Row="9">
-					<TextBlock FlowDirection="LeftToRight" Text="2" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task14" Grid.Column="2" Grid.Row="9">
-					<TextBlock FlowDirection="LeftToRight" Text="3" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task15" Grid.Column="3" Grid.Row="9">
-					<TextBlock FlowDirection="LeftToRight" Text="4" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="Схема Бернулли " Grid.ColumnSpan="5"  Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task9" Grid.Column="0" Grid.Row="7">
+                    <TextBlock FlowDirection="LeftToRight" Text="1" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task10" Grid.Column="1" Grid.Row="7">
+                    <TextBlock FlowDirection="LeftToRight" Text="2" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task11" Grid.Column="2" Grid.Row="7">
+                    <TextBlock FlowDirection="LeftToRight" Text="3" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
 
 
-				<TextBlock Grid.Row="10" Grid.Column="0" Text="Важнейшие законы распределения " Grid.ColumnSpan="5"  Foreground="{StaticResource TextBrush}"  FontFamily="{StaticResource Inter}"></TextBlock>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task16" Grid.Column="0" Grid.Row="11">
-					<TextBlock FlowDirection="LeftToRight" Text="1" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task17" Grid.Column="1" Grid.Row="11">
-					<TextBlock FlowDirection="LeftToRight" Text="2" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<CheckBox FlowDirection="LeftToRight" x:Name="Task18" Grid.Column="2" Grid.Row="11">
-					<TextBlock FlowDirection="LeftToRight" Text="3" />
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
-				<TextBlock Grid.Row="12" Grid.Column="0" Text="Выбрать всё " Grid.ColumnSpan="3"  Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
-				<CheckBox FlowDirection="LeftToRight" x:Name="ChooseAll" Grid.Column="2" Grid.Row="12">
-					<CheckBox.LayoutTransform>
-						<ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
-					</CheckBox.LayoutTransform>
-				</CheckBox>
+                <TextBlock Grid.Row="8" Grid.Column="0" Text="Дискретные случайные величины " Grid.ColumnSpan="5" Foreground="{StaticResource TextBrush}"  FontFamily="{StaticResource Inter}"></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task12" Grid.Column="0" Grid.Row="9">
+                    <TextBlock FlowDirection="LeftToRight" Text="1" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task13" Grid.Column="1" Grid.Row="9">
+                    <TextBlock FlowDirection="LeftToRight" Text="2" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task14" Grid.Column="2" Grid.Row="9">
+                    <TextBlock FlowDirection="LeftToRight" Text="3" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task15" Grid.Column="3" Grid.Row="9">
+                    <TextBlock FlowDirection="LeftToRight" Text="4" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
 
-			</Grid>
-        
 
-		</StackPanel>
+                <TextBlock Grid.Row="10" Grid.Column="0" Text="Непрерывные случайные величины " Grid.ColumnSpan="8"  Foreground="{StaticResource TextBrush}"  FontFamily="{StaticResource Inter}"></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task16" Grid.Column="0" Grid.Row="13">
+                    <TextBlock FlowDirection="LeftToRight" Text="1" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task17" Grid.Column="1" Grid.Row="13">
+                    <TextBlock FlowDirection="LeftToRight" Text="2" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task18" Grid.Column="2" Grid.Row="13">
+                    <TextBlock FlowDirection="LeftToRight" Text="3" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+
+
+                <TextBlock Grid.Row="12" Grid.Column="0" Text="Важнейшие законы распределения " Grid.ColumnSpan="6"  Foreground="{StaticResource TextBrush}"  FontFamily="{StaticResource Inter}"></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task19" Grid.Column="0" Grid.Row="11">
+                    <TextBlock FlowDirection="LeftToRight" Text="1" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task20" Grid.Column="1" Grid.Row="11">
+                    <TextBlock FlowDirection="LeftToRight" Text="2" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <CheckBox FlowDirection="LeftToRight" x:Name="Task21" Grid.Column="2" Grid.Row="11">
+                    <TextBlock FlowDirection="LeftToRight" Text="3" />
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <TextBlock Grid.Row="14" Grid.Column="0" Text="Выбрать всё " Grid.ColumnSpan="4"  Foreground="{StaticResource TextBrush}" FontFamily="{StaticResource Inter}"></TextBlock>
+                <CheckBox FlowDirection="LeftToRight" x:Name="ChooseAll" Grid.Column="2" Grid.Row="14">
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5"></ScaleTransform>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+
+            </Grid>
+
+
+        </StackPanel>
 
         <StackPanel Grid.Row="1" Background="{StaticResource BackgroundBrush}">
-			<Button
+            <Button
         x:Name="generateBtn"
         Content="Сгенерировать"
         Margin="12"
@@ -238,6 +260,6 @@
         Height="48" Click="generateBtn_Click"
         />
 
-		</StackPanel>
-	</Grid>
+        </StackPanel>
+    </Grid>
 </UserControl>

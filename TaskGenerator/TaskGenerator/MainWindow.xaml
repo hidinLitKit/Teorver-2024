@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Icon="{StaticResource AppIcon}"
 		Background="{StaticResource HighlightBrush}"
-        Title="Генератор Задач" Height="560" Width="960" MinHeight="540" MinWidth="860">
+        Title="Генератор Задач" Height="750" Width="960" MinHeight="750" MinWidth="860">
 
 	<Window.Resources>
 		<Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
