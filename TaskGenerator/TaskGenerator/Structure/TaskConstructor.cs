@@ -956,25 +956,29 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     Task task2 = new Task(16, 2);
-                    
 
-                    var alpha2 = random.Next(1, 5);
-                    var beta2 = random.Next(6, 11);
+                    var beta2 = random.Next(11, 20)/10.0;
+                    var alpha2 = random.Next(0, 10)/10.0;
+                    
 
                     task2.condition = "Дана функция распределения F(x) непрерывной случайной величины X:\n" +
                         "F(x) =\n" +
                         "     ⎧ 0, x ≤ 0\n" +
-                        "     ⎨ x²/100, 0 < x ≤ 10\n" +
-                        "     ⎩ 1, x > 10\n" +
+                        "     ⎨ x²/4, 0 < x ≤ 2\n" +
+                        "     ⎩ 1, x > 2\n" +
                         "α = " + alpha2 + ", β = " + beta2 + "\n" +
                         "Требуется:";
                     task2.questions.Add("Найти плотность вероятности f(x).");
-                    task2.questions.Add("Построить графики F(x) и f(x).");
+                    task2.questions.Add("Найти M(x), D(x), σ(x)");
                     task2.questions.Add("Найти P(α < X < β) для данных α,β.");
-
-                    task2.answers.Add("\nf(x) = \n    ⎧ 0, x ≤ 0\n    ⎨ x/50, 0 < x ≤ 10\n    ⎩ 0, x > 10");
-                    task2.answers.Add("");
-                    task2.answers.Add(String.Format("P(α < X < β) = {0:0.0000}", (beta2 * beta2/100.0) - (alpha2* alpha2/100.0)));
+                    Func<double, double> MX = x => (Math.Pow(x,3) )/ 6.0;
+                    Func<double, double> DX = x => x * x * x* x / 8.0;
+                    double mx = MX(2.0) - MX(0.0);
+                    double dx = DX(2.0) - DX(0.0) - mx*mx;
+                    double s = Math.Sqrt(dx);
+                    task2.answers.Add("\nf(x) = \n    ⎧ 0, x ≤ 0\n    ⎨ x/2, 0 < x ≤ 2\n    ⎩ 0, x > 2");
+                    task2.answers.Add(String.Format("M(x) = {0:0.0000}, D(x) = {1:0.0000}, σ(x) = {2:0.0000}",mx,dx,s));
+                    task2.answers.Add(String.Format("P(α < X < β) = {0:0.0000}", (beta2 * beta2/4.0) - (alpha2* alpha2/4.0)));
                     return task2;
             }
             throw new ArgumentException();
@@ -984,6 +988,7 @@ namespace TaskGenerator
         {
             return x * x * x / 3.0 - 3 * x * x + 8 * x;
         }
+
         private static Task CreateTaskType17(ref Random random, int subtype)
         {
             switch (subtype)
@@ -1024,28 +1029,34 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     
-                    var b=random.Next(2, 10);
+                    var b=random.Next(2, 5);
                     var a=random.Next(1, b-1);
                     Task task2 = new Task(17, 2);
                     task2.condition = "Дана функция распределения F(x) непрерывной случайной величины X:\nf(x)=\n"+
                                      "     ⎧ 0, x < " + a + '\n' +
-                                     "     ⎨ a(4x+3), " + a + " ≤ x ≤ " + b + '\n' +
+                                     "     ⎨ a(6x² - x - 3), " + a + " ≤ x ≤ " + b + '\n' +
                                      "     ⎩ 0, x > " + b;
                     task2.questions.Add("Найти параметр a.");
                     task2.questions.Add("Найти функцию распределения F(x).");
-                    task2.questions.Add("Построить графики f(x) и F(x).");
-                    double ot = 1/(2 *(double)b * (double)b + 3 * (double)b - (2 * (double)a * (double)a + 3 * (double)a));
+                    Func<double, double> integral1 = x => 2.0 * Math.Pow(x, 3) - 0.5 * Math.Pow(x, 2) - 3 * x;
+                    double ot = 1 / ( integral1(b)-integral1(a) );
                     task2.answers.Add(string.Format("A={0:0.0000}",ot));
-                    double f1 = ot * 2;
-                    double f2 = ot * 3;
-                    double f3 = 2 * a * a * ot + 3 * a * ot;
 
+                    double C = integral1(a);
                     task2.answers.Add(
                         "F(x)=\n" +
                                      "     ⎧ 0, x < " + a + '\n' +
-                                     "     ⎨ " + string.Format("{0:0.000}x²+{1:0.000}x-{2:0.000}", f1, f2, f3) + ", " + a + " ≤ x ≤ " + b + '\n' +
+                                     "     ⎨ " + string.Format("{0:0.000}(2x³ - 0.5x² - 3x + ({1:0.000}))", ot,C) + ", " + a + " ≤ x ≤ " + b + '\n' +
                                      "     ⎩ 1, x > " + b
                         );
+
+                    Func<double, double> integralMat = x => ot * (2.5*Math.Pow(x,4) - Math.Pow(x,3)/3.0 - 1.5*Math.Pow(x,2) );
+                    double matx = integralMat(b)-integralMat(a);
+                    Func<double, double> integralAs = x => ot*(Math.Pow(x - matx, 4) * (4 * x * (5 * x + 2 * matx - 1) + (matx - 3) * (2 * matx + 5))) / 20;
+                    Func<double, double> integralEk = x => ot * ((Math.Pow(x - a , 5) * (5 * x * (36 * x + 12 * matx- 7) + 12 * matx*matx - 7 * matx - 126)) / 210);
+                    double _as = integralAs(b) - integralAs(a);
+                    double _ek = integralEk(b) - integralEk(a);
+                    task2.answers.Add(string.Format("As = {0:0000}, Ek = {1:0000}", _as, _ek));
                     return task2;
             }
             throw new ArgumentException();
@@ -1060,14 +1071,13 @@ namespace TaskGenerator
         {
             return -(x * x) / 2.0 + 2 * x - 1;
         }
-        
-        static double fun4(double x)
+        static double PforTask18(double down, double up)
         {
-            return x * x * (1.0 / 3.0);
-        }
-        static double fun5(double x)
-        {
-            return ((-(x * x) - 5) / 6.0 + x + 1.0 / 3.0);
+            Func<double, double> firstx = x => (Math.Pow(x + 3, 3) ) / 103.0;
+            Func<double, double> secondx = x => (( 3 * x )/ 17.0 ) - ( ( 3 * x * x )/ 136.0);
+            double first = firstx(0) - firstx(down);
+            double second = secondx(up) - secondx(0);
+            return first + second;
         }
         private static Task CreateTaskType18(ref Random random, int subtype)
         {
@@ -1116,13 +1126,13 @@ namespace TaskGenerator
                 case 2:
                     Task task2 = new Task(18, 2);
 
-                    var aa2 = random.Next(0, 11) / -10.0 + 0.5;
-                    var bb2 = random.Next(0, 3) * 0.5 + 1;
+                    var aa2 = random.Next(-30, 0) / 10.0;
+                    var bb2 = random.Next(0, 40) /  10.0;
 
                     task2.condition = "Дана плотность вероятности f(x) непрерывной случайной величины X, имеющая две ненулевые составляющие формулы:\nf(x)=\n" +
-                                     "     ⎧ 0, x ≤ 0" + '\n' +
-                                     "     ⎨ 2x/3, 0 ≤ x ≤ 1" + '\n' +
-                                     "     ⎨ (3-x)/3, 1 ≤ x ≤ 3" + '\n' +
+                                     "     ⎧ 0, x ≤ -3" + '\n' +
+                                     "     ⎨ 1/27 (x+3)², -3 < x ≤ 0" + '\n' +
+                                     "     ⎨ 1/3 - x/12, 0 < x ≤ 4" + '\n' +
                                      "     ⎩ 0, x > 3" + '\n' +
                                      "α=" + aa2 + ",β=" + bb2 + '\n' +
                                      "Требуется:";
@@ -1133,20 +1143,17 @@ namespace TaskGenerator
                     task2.questions.Add("Найти M(X),D(x),σ(X).");
                     task2.questions.Add("Построить график f(x).");
 
-                    task2.answers.Add("Условие выполняется.");
+                    task2.answers.Add("Условие не выполняется.");
                     task2.answers.Add("F(x)="+'\n' +
-                                      "     ⎧ 0, x ≤ 0" + '\n' +
-                                      "     ⎨ x²/3, 0 ≤ x ≤ 1" + '\n' +
-                                      "     ⎨ (-x²-5)/6+x+1/3, 1 ≤ x ≤ 3" + '\n' +
-                                      "     ⎩ 1, x > 3");
+                                      "     ⎧ 0, x ≤ -3" + '\n' +
+                                      "     ⎨ (x+3)³/ 103, -3 < x ≤ 0" + '\n' +
+                                      "     ⎨ 27/103 + 3x/17 - 3x²/136, 0 < x ≤ 4" + '\n' +
+                                      "     ⎩ 1, x > 4");
 
-                    var realA2 = aa2 < 0 ? 0 : aa2;
-                    var realB2 = bb2 > 3 ? 3 : bb2;
-
-                    double ot3 = fun5(realB2) - fun4(realA2);
+                    double ot3 = PforTask18(aa2,bb2);
                     task2.answers.Add("P(α≤x≤β) = " + String.Format("{0:0.000}", ot3));
 
-                    double x1 = 4.0 / 3.0, x2 = 7.0 / 18.0, x3 = Math.Sqrt(7.0 / 18.0);
+                    double x1 = 0.34, x2 = 0.98, x3 = 0.98;
                     task2.answers.Add(string.Format("M(X)={0:0.000}, D(X)={1:0.000}, σ(X)={2:0.000}", x1, x2, x3));
                     return task2;
             }
@@ -1176,13 +1183,14 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     Task task2 = new Task(19, 2);
-                    
-                    int hours = random.Next(1, 6 + 1);
-                    int minutes = random.Next(1, 20 + 1);
-                    task2.condition = "Интервал движения теплоходов «Москва» на реке Иртыш составляет "+ hours + " ч. " +
-                        "Дачники подходят к пристани в некоторый момент, не зная расписания. Какова вероятность того, " +
-                        "что они опоздали на очередной теплоход не более чем на "+ minutes +" мин?";
-                    task2.answers.Add(string.Format(minutes + "/" + (hours*60) + " ≈ {0:0.000}", minutes/(hours * 60.0)));
+                    double sigma = (double)random.Next(1, 10);
+                    double mat = (double) random.Next(70, 90);
+                    double alpha = (double)random.Next(50, 60);
+                    double beta = (double)random.Next(90, 100);
+                    Func<double, double> phi = x => (x - mat) / (sigma);
+                    task2.condition = $"Динамическая нагрузка X на соединительную раму тележек восьмиосного вагона имеет " +
+                        $"нормальное распределение(m = {mat} т; σ = {sigma} т). Какова вероятность диапазона нагрузок от {alpha} до {beta} т ?";
+                    task2.answers.Add(string.Format("Ф({0:0.00})-Ф({1:0.00})",phi(beta),phi(alpha)));
                     return task2;
             }
             throw new ArgumentException();
@@ -1204,15 +1212,20 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     Task task2 = new Task(20, 2);
-                    var mou = Convert.ToDouble(random.Next(13, 20));
+                    double del = (double)random.Next(2, 5)/10.0;
+                    double down = -del * 0.5;
+                    double up = del * 0.5;
+                    double mistake = (double)random.Next(1, Convert.ToInt32( del*10 )) /100.0;
+                    Func<double, double> F = x => (x - down) / (up - down);
 
-                    task2.condition = "Время T безотказной работы тягового электродвигателя распределено по экспоненциальному закону с математическим ожиданием " +
-                        (int)mou + " месяцев. Какова вероятность того, что данный двигатель откажет:";
-                    task2.questions.Add("Менее чем через месяц после ремонта.");
-                    task2.questions.Add("Не менее чем через год после ремонта.");
-                    double ly = 1 / mou;
-                    task2.answers.Add(String.Format("1-{0:0.000}*e^(-{1:0})", ly, ly * mou));
-                    task2.answers.Add(String.Format("1-{0:0.000}*e^(-{1:0.000})", ly, ly * 12));
+                    double p1 = F(mistake) - F(-mistake);
+                    double p2 = 1 - p1;
+
+                    task2.condition = $" Цена деления шкалы амперметра равна {del} А. " +
+                        $"Показания округляются до ближайшего деления. Найти вероятность того, что при отсчете будет сделана " +
+                        $"ошибка не более {mistake} А.";
+
+                    task2.answers.Add(string.Format("P = {0:0.00}",p1));
                     return task2;
             }
             throw new ArgumentException();
@@ -1239,16 +1252,22 @@ namespace TaskGenerator
                 case 2:
                     
                     Task task2 = new Task(21, 2);
+                    double mat = 9;
+                    double sigm = 3;
+                    double down = (double)random.Next(0, 7);
+                    double up = (double)random.Next(8, 16);
+                    Func<double, double> phi = x => (x - mat) / (sigm);
 
-                    var gamma = random.Next(8) * 5 + 15;
-                    var error = random.Next(8) * 5 + 15;
 
-                    task2.condition = "Случайные ошибки измерения подчинены нормальному закону со " +
-                        "средним квадратическим отклонением " + gamma + " мм и математическим ожиданием, равным нулю. " +
-                        "Найти вероятность того, что измерение будет произведено с ошибкой, не превосходящей " +
-                        "по абсолютной величине " + error + " мм.";
+                    task2.condition = $"Случайная величина Х имеет нормальное распределение, " +
+                        $"причем m = 9. Вероятность попадания Х в интервал (0; 18) равна 0,9973. ";
 
-                    task2.answers.Add(String.Format("2Ф({0:0.0000})", Convert.ToDouble(error) / Convert.ToDouble(gamma)));
+                    task2.questions.Add($"Чему равна вероятность попадания X в интервал ({down}; {up})? ");
+                    task2.questions.Add($"Записать формулу плотности вероятности f(x).");
+
+                    task2.answers.Add(String.Format("Ф({0:0.00}) - Ф({1:0.00})", phi(up),phi(down)));
+                    task2.answers.Add(String.Format("1/({0:0}*sqrt(2pi)) * exp( - (x - {1:0})^2 / 2 * {0:0}^2)", sigm, mat));
+
 
                     return task2;
             }
