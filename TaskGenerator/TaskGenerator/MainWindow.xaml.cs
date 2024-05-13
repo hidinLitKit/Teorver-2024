@@ -105,7 +105,7 @@ namespace TaskGenerator
         private void onChooseAll(object sender, RoutedEventArgs e)
         {
             bool _isChecked = (bool) generator.ChooseAll.IsChecked;
-            for (int i = 1; i < 19; i++)
+            for (int i = 1; i < 22; i++)
             {
                 var obj = generator.FindName("Task" + i);
                 if (obj is CheckBox checkbox)
