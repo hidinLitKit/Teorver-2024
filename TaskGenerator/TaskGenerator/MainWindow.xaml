@@ -207,14 +207,9 @@
 		x:Name="menu"
 		FontSize="12"
 		FontWeight="Medium"
-		Background="{StaticResource BackgroundBrush}" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}">
-			<MenuItem Header="О приложении" Height="{Binding ActualHeight, ElementName=menu, Mode=OneWay}" Click="MenuItem_Click"
-                      Foreground="{StaticResource TextBrush}">
+		Background="{StaticResource BackgroundBrush}" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}"/>
 
-			</MenuItem>
-		</Menu>
-
-		<Rectangle Fill="{StaticResource HighlightBrush}" Grid.Row="1" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}"/>
+        <Rectangle Fill="{StaticResource HighlightBrush}" Grid.Row="1" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}"/>
 		<Grid Grid.Row="2" Margin="0,0,0,0" Grid.RowSpan="2" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="264"/>

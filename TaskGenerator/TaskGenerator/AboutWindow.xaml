@@ -77,35 +77,6 @@
                     FontFamily="{StaticResource Inter}"
                     FontSize="16"
                     FontWeight="Medium"/>
-                <Label 
-                                            Foreground="{StaticResource TextBrush}"
-
-                    Content="Разработчики"
-                    FontFamily="{StaticResource Inter}"
-                    FontSize="24"
-                    FontWeight="Bold"
-                    Padding="24,0,24,24"/>
-
-                <control:DeveloperCard
-                    avatar="{StaticResource ZedNull}"
-                    name="Хахук Рустам"
-                    work1="Разработка интерфейса"
-                    work2="Решение задач"
-                    Margin="24,0,24,24" Height="80"/>
-
-                <control:DeveloperCard
-                    avatar="{StaticResource StarProxima}"
-                    name="Прозоров Максим"
-                    work1="Разработка структуры"
-                    work2="Решение задач"
-                    Margin="24,0,24,24" Height="80"/>
-
-                <control:DeveloperCard
-                    avatar="{StaticResource Jakepps}"
-                    name="Нагалевский Артём"
-                    work1="Импорт / экспорт файлов"
-                    work2="Решение задач"
-                    Margin="24,0,24,24" Height="80"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
