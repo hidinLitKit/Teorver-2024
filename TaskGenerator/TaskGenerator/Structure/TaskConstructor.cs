@@ -82,21 +82,40 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
+
 
                     Task task1 = new Task(1, 1);
-                    var numCount = 4 + Convert.ToInt32(Math.Floor(random.NextDouble() * 3));
+                    var totalRooms = 4 + Convert.ToInt32(Math.Floor(random.NextDouble() * 3));
                     var sndNum = 1;
-                    for (int i = 0; i < numCount; i++)
+                    for (int i = 0; i < totalRooms; i++)
                     {
                         sndNum *= (10 - i);
                     }
-                    var numString = (numCount == 4) ? "четырехзначным" : (numCount == 5) ? "пятизначным" : "шестизначным";
-                    task1.condition = "Наугад выбирается автомобиль с " + numString + " номером. Найти вероятность того, что: ";
-                    task1.questions.Add("Это автомобиль Ф. Киркорова");
-                    task1.questions.Add("Номер не содержит одинаковых цифр.");
-                    task1.answers.Add(String.Format("1/{0:0} ≈ {1:0.000000}", Math.Pow(10, numCount), 1 / Math.Pow(10, numCount)));
-                    task1.answers.Add(String.Format("{0:0}/{1:0} ≈ {2:0.000000}", sndNum, Math.Pow(10, numCount), sndNum / Math.Pow(10, numCount)));
+                    var numString = (totalRooms == 4) ? "10" : (totalRooms == 5) ? "15" : "20";
+                    task1.condition = "В университете после обеда оказалось свободным " + numString + " аудиторий. Преподаватель Иваненко, Петренко и " +
+                        "Сидоренко случайным образом занимают аудитории для консультаций со студентами." +
+                        "Какова вероятность того, что: ";
+                    task1.questions.Add("аудитории №401, №405. №406 займут соответственно Иваненко, Петренко и Сидоренко;");
+                    task1.questions.Add("аудитория №433 не будет занята Иваненко?");
+
+
+
+                    task1.answers.Clear();
+                    double probQuestionA = 1.0 / (totalRooms * (totalRooms - 1) * (totalRooms - 2)); // 1/(N*(N-1)*(N-2))
+                    task1.answers.Add(String.Format("1/{0:0} ≈ {1:0.00000}", totalRooms * (totalRooms - 1) * (totalRooms - 2), probQuestionA));
+
+
+                    if (totalRooms >= 433)
+                    {
+                        task1.answers.Add("Невозможно, так как аудитории №433 нет среди свободных.");
+                    }
+                    else
+                    {
+                        double probQuestionB = (totalRooms - 1.0) / totalRooms; // (N-1)/N
+                        task1.answers.Add(String.Format("{0:0}/{1:0} ≈ {2:0.000000}", totalRooms - 1, totalRooms, probQuestionB));
+                    }
+
+
                     return task1;
                 case 2:
                     Task task2 = new Task(1, 2);
@@ -123,24 +142,28 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
 
-                    var loteryCount = 6 + Convert.ToInt32(Math.Floor(random.NextDouble() * 5));
-                    var loteryWinCount = 2 + Convert.ToInt32(Math.Floor(random.NextDouble() * 4));
-                    var loteryPickedCount = 2 + Convert.ToInt32(Math.Floor(random.NextDouble() * (loteryCount - loteryWinCount - 1)));
 
-                    var loteryWinPickedCount = 1 + Convert.ToInt32(Math.Floor(random.NextDouble() * loteryWinCount));
+
+                    var totalPosters = 20 + Convert.ToInt32(Math.Floor(random.NextDouble() * 11)); // 20 to 30 posters
+                    var analyticGeometryPosters = 10 + Convert.ToInt32(Math.Floor(random.NextDouble() * 6)); // 10 to 15 posters for analytic geometry
+                    var calculusPosters = 5 + Convert.ToInt32(Math.Floor(random.NextDouble() * 6)); // 5 to 10 posters for calculus
+                    var pickedPosters = 5;
 
                     var task1 = new Task(2, 1);
-                    task1.condition = "Имеется " + loteryCount + " лотерейных билетов, среди которых " + loteryWinCount + " выигрышных. Найдите вероятность того, что среди " + loteryPickedCount + " наудачу купленных билетов:";
-                    task1.questions.Add("Количество выигрышных билетов равно " + loteryWinPickedCount + ".");
-                    task1.questions.Add("Нет выигрышных билетов.");
 
-                    var result1 = (C(loteryWinCount, loteryWinPickedCount) * C(loteryCount - loteryWinCount, loteryPickedCount - loteryWinPickedCount)) / (C(loteryCount, loteryPickedCount));
-                    var result2 = (C(loteryWinCount, 0) * C(loteryCount - loteryWinCount, loteryPickedCount)) / C(loteryCount, loteryPickedCount);
+                    task1.condition = $"На кафедре математики в шкафу хранятся {totalPosters} свернутых в рулоны плакатов, из которых {analyticGeometryPosters} — для занятий по аналитической геометрии, а {calculusPosters} — по математическому анализу. Преподаватель берет {pickedPosters} рулонов наугад.";
 
-                    task1.answers.Add(string.Format("{0:0.0000}", result1));
-                    task1.answers.Add(string.Format("{0:0.0000}", result2));
+                    task1.questions.Add("Три плаката будут по аналитической геометрии.");
+                    task1.questions.Add("Два плаката — по аналитической геометрии и два — по математическому анализу.");
+
+                    double result1 = (double)(C(analyticGeometryPosters, 3) * C(totalPosters - analyticGeometryPosters, 2)) / C(totalPosters, pickedPosters);
+                    double result2 = (double)(C(analyticGeometryPosters, 2) * C(calculusPosters, 2) * C(totalPosters - analyticGeometryPosters - calculusPosters, 1)) / C(totalPosters, pickedPosters);
+
+                    task1.answers.Add(String.Format("C({0:0},{1:0})*C({2:0},{3:0})/C({4:0},{5:0}) ≈ {6:0.0000}", analyticGeometryPosters, 3, totalPosters - analyticGeometryPosters, 2, totalPosters, pickedPosters, result1));
+                    task1.answers.Add(String.Format("C({0:0},{1:0})*C({2:0},{3:0})*C({4:0},{5:0})/C({6:0},{7:0}) ≈ {8:0.0000}", analyticGeometryPosters, 2, calculusPosters, 2, totalPosters - analyticGeometryPosters - calculusPosters, 1, totalPosters, pickedPosters, result2));
+
+
                     return task1;
 
                 case 2:
@@ -180,15 +203,15 @@ namespace TaskGenerator
                 case 1:
                     Task task1 = new Task(3, 1);
 
-                    task1.condition = "Эксперимент состоит в бросании игральной кости. Пусть событие А – появление больше 4 очков, событие В – появление больше 3 и меньше 6 очков, " +
-                        "событие С – появление больше 3 очков. Выразите событие С через события А и В. " +
-                        "Постройте множество элементарных исходов и выявите состав подмножеств, соответствующих событиям:";
-                    task1.questions.Add("A ∪ B");
-                    task1.questions.Add("A ∩ ¬B");
+                    task1.condition = "Опыт заключается в бросании двух монет. Рассматриваются следующие события: " +
+                        "A — появление герба на первой монете; B — появление герба на второй монете; " +
+                        "D — появление решки на второй монете. Составить множество элементарных исходов для данного " +
+                        "опыта и определить состав подмножеств, соответствующих событиям: ";
 
-                    task1.answers.Add("C = A ∪ B");
-                    task1.answers.Add("Ω = {1,2,3,4,5,6}, A ∪ B = {4,5,6}, A ∩ ¬B = {6}");
-
+                    task1.questions.Add("B ∪ D");
+                    task1.questions.Add("A ∩ B");
+                    task1.answers.Add("B ∪ D = {HH, HT, TH, TT} - всевозможные события");
+                    task1.answers.Add("A ∩ B = {HH}");
                     return task1;
                 case 2:
                     Task task2 = new Task(3, 2);
@@ -211,21 +234,27 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
 
-                    var prob1 = (random.Next(1,10)) / 10.0;
-                    var prob2 = (random.Next(1,10)) / 10.0;
+
+                    double jokeProb = (random.Next(1, 10)) / 10.0;  // Вероятность того, что кандидат шутит
+                    double lifeExampleProb = (random.Next(1, 10)) / 10.0;  // Вероятность того, что кандидат приводит личные примеры
 
                     Task task1 = new Task(4, 1);
-                    task1.condition = "Два поэта-песенника предложили по одной песне исполнителю. Известно, " +
-                        "что песни первого поэта эстрадный певец включает в свой репертуар с вероятностью " + prob1 + ", " +
-                        "второго – с вероятностью " + prob2 + ". Какова вероятность того, что певец возьмет:";
-                    task1.questions.Add("Обе песни.");
-                    task1.questions.Add("Хотя бы одну.");
-                    task1.questions.Add("Только песню второго поэта.");
-                    task1.answers.Add(string.Format("{0:0.00}", prob1 * prob2));
-                    task1.answers.Add(string.Format("{0:0.00}", 1 - (1 - prob1) * (1 - prob2)));
-                    task1.answers.Add(string.Format("{0:0.00}", (1 - prob1) * prob2));
+                    task1.condition = "Кандидат в депутаты во время выступления на публике с вероятностью " + jokeProb +
+                        " шутит и рассказывает анекдоты, с вероятностью " + lifeExampleProb + " приводит примеры из собственной жизни. " +
+                        "Какова вероятность того, что на очередной встрече с трудящимися:";
+
+                    task1.questions.Add("он ни разу не пошутит;");
+                    task1.questions.Add("воспользуется обоими приемами общения с публикой;");
+                    task1.questions.Add("обойдется без личных примеров?");
+
+                    double noJokes = 1 - jokeProb; // Не шутит
+                    double both = jokeProb * lifeExampleProb; // Использует оба приема
+                    double noExamples = 1 - lifeExampleProb; // Без личных примеров
+
+                    task1.answers.Add(string.Format("{0:0.00}", noJokes));
+                    task1.answers.Add(string.Format("{0:0.00}", both));
+                    task1.answers.Add(string.Format("{0:0.00}", noExamples));
 
                     return task1;
                 case 2:
@@ -251,18 +280,22 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
-                    var prob1 = Convert.ToDouble(random.Next(1, 8));
-                    var prob2 = Convert.ToDouble(random.Next(1, 10 - Convert.ToInt32(prob1) - 1));
-                    var prob3 = Convert.ToDouble(10 - prob1 - prob2);
 
-                    prob1 /= 10; prob2 /= 10; prob3 /= 10;
+
+
+                    double winProb = random.Next(1, 8) / 10.0; // Вероятность выигрыша балерины в одной партии
+                    double drawProb = random.Next(1, 10 - (int)(winProb * 10) - 1) / 10.0; // Вероятность ничьей
+                    double lossProb = 1.0 - winProb - drawProb; // Вероятность проигрыша (выигрыша вахтера)
 
                     Task task1 = new Task(5, 1);
-                    task1.condition = "Два гроссмейстера играют две партии в шахматы. Вероятность выигрыша в одной партии для первого шахматиста " +
-                        "равна " + prob1 + ", для второго – " + prob2 + "; вероятность ничьей – " + prob3 + ". " +
-                        "Какова вероятность того, что первый гроссмейстер выиграет матч?";
-                    task1.answers.Add(string.Format("{0:0.0000}", (prob1 * prob1 + prob1 * prob3 + prob3 * prob1)));
+                    task1.condition = "Известная в городе балерина любит играть в шашки с вахтером театра. Вероятность ее выигрыша в одной партии равна " +
+                        winProb + ", вероятность ничьей — " + drawProb + ". Какова вероятность того, что балерина выиграла партий больше, чем вахтер?";
+
+                    double winMoreThanLoss = (winProb * winProb * winProb) +
+                                             (3 * winProb * winProb * lossProb) +
+                                             (3 * winProb * winProb * drawProb);
+
+                    task1.answers.Add(string.Format(" {0:0.0000}", winMoreThanLoss));
                     return task1;
                 case 2:
                     
@@ -282,18 +315,36 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
-                    var brockenCount = random.Next(1, 5) * 5;
+
+
+                    int totalBooks = 100;
+                    int newBooks = random.Next(1, 5) * 5;
+                    int booksPicked = 3;
 
                     Task task1 = new Task(6, 1);
+                    task1.condition = "На стеллаже в библиотеке стоят " + totalBooks + " книг по математике, " +
+                        newBooks + " из которых новые (2009 года издания). Библиотекарь наугад взял " +
+                        booksPicked + " учебника. Найти вероятность того, что они окажутся новыми.";
 
-                    task1.condition = "В ящике 100 деталей, из которых " + brockenCount + " бракованных. Из него поочередно извлекается " +
-                        "по одной детали (с возвратом и без возврата). Найти вероятность того, что во второй раз " +
-                        "будет вынута стандартная деталь при условии, что в первый раз извлечена деталь:";
-                    task1.questions.Add("Стандартная.");
-                    task1.questions.Add("Бракованная.");
-                    task1.answers.Add(string.Format("{0:0.000000}", ((99.0 - brockenCount) / 99.0)));
-                    task1.answers.Add(string.Format("{0:0.000000}", (99.0 - brockenCount + 1) / 99.0));
+                    // Вычисление вероятности
+                    double probability = CalculateCombination(newBooks, booksPicked) / CalculateCombination(totalBooks, booksPicked);
+                    task1.answers.Add(string.Format(" {0:0.000000}", probability));
+
+                    static double CalculateCombination(int n, int k)
+                    {
+                        return Factorial(n) / (Factorial(k) * Factorial(n - k));
+                    }
+
+                    static double Factorial(int number)
+                    {
+                        double result = 1;
+                        for (int i = 2; i <= number; i++)
+                        {
+                            result *= i;
+                        }
+                        return result;
+                    }
+
 
                     return task1;
                 case 2:
@@ -317,19 +368,35 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
-                    var prob1 = Convert.ToDouble(random.Next(1, 10));
-                    var prob2 = Convert.ToDouble(random.Next(1, 10));
-                    var prob3 = Convert.ToDouble(random.Next(1, 10));
+                    double probFlower1 = Math.Round(0.1 + random.NextDouble() * 0.8, 1);
+                    double probFlower2 = Math.Round(0.1 + random.NextDouble() * (0.8 - probFlower1), 1);
+                    double probFlower3 = Math.Round(1 - probFlower1 - probFlower2, 1);
 
-                    prob1 /= 10; prob2 /= 10; prob3 /= 10;
+                    // Корректировка если сумма вероятностей не равна 1
+                    if (probFlower3 < 0.1 || probFlower3 > 0.9)
+                    {
+                        probFlower1 = Math.Round(0.1 + random.NextDouble() * 0.5, 1);
+                        probFlower2 = Math.Round(0.1 + random.NextDouble() * (0.4 - probFlower1), 1);
+                        probFlower3 = Math.Round(1 - probFlower1 - probFlower2, 1);
+                    }
+
+                    // Генерация случайных вероятностей для похода в музей
+                    double probMuseum1 = Math.Round(0.1 + random.NextDouble() * 0.8, 1);
+                    double probMuseum2 = Math.Round(0.1 + random.NextDouble() * 0.8, 1);
+                    double probMuseum3 = Math.Round(0.1 + random.NextDouble() * 0.8, 1);
+
 
                     Task task1 = new Task(7, 1);
+                    task1.condition = "Студент Лямурский Петя любит дарить девушкам цветы: " +
+                        "маргаритки он дарит с вероятностью " + probFlower1 + ", хризантемы — " + probFlower2 +
+                        ", герань, выращенную его бабушкой, — с вероятностью " + probFlower3 + ". Девушки, " +
+                        "одаренные маргаритками, идут с Петей в палеонтологический музей с вероятностью" +
+                        +probMuseum1 + ", получившие хризантемы, — с вероятностью " + probMuseum2 + ", " +
+                        "герань — " + probMuseum3;
 
-                    task1.condition = "В скачках участвуют три лошади. Первая лошадь выигрывает скачки с вероятностью " + prob1 + ", " +
-                        "вторая – " + prob2 + ", третья – " + prob3 + ". Какова вероятность того, что лошадь, на которую поставил игрок, " +
-                        "придет на скачках первой, если он выбирает ее на удачу?";
-                    task1.answers.Add(string.Format("{0:0.000000}", (prob1 + prob2 + prob3) / 3.0));
+                    double totalProbability = (probFlower1 * probMuseum1) + (probFlower2 * probMuseum2) + (probFlower3 * probMuseum3);
+
+                    task1.answers.Add(string.Format("Вероятность того, что знакомая Пети провела вечер в музее: {0:0.0000}", totalProbability));
 
                     return task1;
 
@@ -359,22 +426,45 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    var prob1 = Convert.ToDouble(random.Next(1, 20));
-                    var prob2 = Convert.ToDouble(random.Next(1, 20));
-                    var prob3 = Convert.ToDouble(random.Next(1, 20));
+                    Task task1 = new Task(8, 2);
 
-                    prob1 /= 20; prob2 /= 20; prob3 /= 20;
+                    int[] rabbitPercentages = new int[] {
+                        random.Next(1, 11),  // Для первого маршрута от 1% до 10%
+                        random.Next(1, 11),  // Для второго маршрута от 1% до 10%
+                        random.Next(1, 11)   // Для третьего маршрута от 1% до 10%
+                        };
+                    // Отношения пассажиров между маршрутами
+                    double passengerRatioRoute2 = 1;  // Примем число пассажиров второго маршрута за базовое
+                    double passengerRatioRoute1 = 3 * passengerRatioRoute2;  // Втрое больше на первом
+                    double passengerRatioRoute3 = 1.5 * passengerRatioRoute2;  // В полтора раза больше на третьем
 
-                    Task task1 = new Task(8, 1);
+                    // Общее число пассажиров, пропорционально
+                    double totalPassengers = passengerRatioRoute1 + passengerRatioRoute2 + passengerRatioRoute3;
 
-                    task1.condition = "Электростанция оборудована генератором электрического тока, приводимым во вращение дизельным двигателем. " +
-                        "Состояние оборудования и воспламенительные свойства дизельного топлива (цетановое число) таковы, " +
-                        "что при использовании в качестве топлива соляровых фракций прямой перегонки нефти генератор приходит в аварийное состояние с вероятностью " +
-                        prob1 + ", при использовании керосиновых фракций – с вероятностью " + prob2 + ", а при использовании газойлевых фракций – с вероятностью " + prob3 +
-                        ". 26 апреля 1986 г. года электростанция исправно давала ток. Какова вероятность того, что в этот день дизельный двигатель работал на солярке, " +
-                        "если тот или иной вид топлива используется с равной вероятностью?";
+                    // Вероятности, что пенсионер приехал на каждом маршруте
+                    double[] probabilities = new double[3];
 
-                    task1.answers.Add(string.Format("{0:0.000000}", (1 - prob1) / ((1 - prob1) + (1 - prob2) + (1 - prob3))));
+                    for (int i = 0; i < 3; i++)
+                    {
+                        probabilities[i] = (rabbitPercentages[i] / 100.0) * (passengerRatioRoute1 / totalPassengers);
+                    }
+                    double maxProbability = 0;
+                    int likelyRoute = 0;
+                    for (int i = 0; i < probabilities.Length; i++)
+                    {
+                        if (probabilities[i] > maxProbability)
+                        {
+                            maxProbability = probabilities[i];
+                            likelyRoute = i + 1;
+                        }
+                    }
+
+                    task1.condition = " Контролер работает на трех автобусных маршрутах.Число пассажиров первого маршрута втрое превышает число пассажиров второго " +
+            "и в полтора раза — третьего. Процент «зайцев» на этих маршрутах составляет " + rabbitPercentages[0] + ", " + rabbitPercentages[1] + " и " + rabbitPercentages[2] + " соответственно. " +
+            "Пассажир, случайно пойманный контролером на остановке «Вокзал», оказался пенсионером, имеющим право на бесплатный проезд. " +
+            "Каким маршрутом вероятнее всего приехал пенсионер?";
+                    task1.answers.Add($" {likelyRoute}");
+
                     return task1;
                 case 2:
                     var A1 = random.Next(1, 5) / 10.0;
@@ -403,13 +493,27 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
-                    
-                    var prob1 = random.Next(1, 4);
-                    var prob2 = random.Next(1, 8);
+                    int n = 8;
+                    int k = random.Next(1, 9);
 
                     Task task1 = new Task(9, 1);
-                    task1.condition = "В скольких партиях с равным по силе противником выигрыш более вероятен: в " + prob1 + " партиях из 4 или в " + prob2 + " из 8?";
-                    task1.answers.Add(C(4,prob1) * Math.Pow(0.5, 4) > C(8, prob2) * Math.Pow(0.5, 8) ? "1" : "2");
+                    task1.condition = $"В ячейку памяти записывается 8-разрядное двоичное число. Значения 0 и 1 в каждом разряде появляются с равной вероятностью. Найти вероятность того, что в записи двоичного числа содержится {k} единиц.";
+
+                    double probability = CalculateCombination(n, k) * Math.Pow(0.5, n);
+                    task1.answers.Add($" {probability:0.000000}");
+
+                    static double CalculateCombination(int n, int k)
+                    {
+                        if (k > n) return 0;
+                        if (k == 0 || k == n) return 1;
+                        if (k > n - k) k = n - k; // Симметрия C(n, k) == C(n, n-k)
+                        double result = 1;
+                        for (int i = 0; i < k; i++)
+                        {
+                            result *= (n - i) / (double)(i + 1);
+                        }
+                        return result;
+                    }
 
                     return task1;
                 case 2:
@@ -441,29 +545,66 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(10, 1);
-                    
 
-                    var testCount = random.Next(7,10) * 100;
-                    var prob = random.Next(5, 15) / 20.0;
-                    var equalCount = random.Next(5,10) * 50;
 
-                    var startCount = random.Next(2, 6) * 50;
-                    var endCount = random.Next(6, 11) * 50;
+                    // var testCount = random.Next(7,10) * 100;
+                    //var prob = random.Next(5, 15) / 20.0;
+                    // var equalCount = random.Next(5,10) * 50;
 
-                    task1.condition = "В каждом из " + testCount + " независимых испытаний событие А происходит с постоянной вероятностью " + prob + ". " +
-                        "Найти вероятность того, что событие А происходит:";
-                    task1.questions.Add("Меньше чем " + endCount + " и больше чем " + startCount + " раз.");
-                    task1.questions.Add("Точно " + equalCount + " раз.");
+                    //var startCount = random.Next(2, 6) * 50;
+                    //var endCount = random.Next(6, 11) * 50;
 
-                    var x = (equalCount - testCount * prob) / Math.Sqrt(testCount * prob * (1 - prob));
 
-                    var x11 = (startCount - testCount * prob) / Math.Sqrt(testCount * prob * (1 - prob));
-                    var x22 = (endCount - testCount * prob) / Math.Sqrt(testCount * prob * (1 - prob));
+                    int totalTickets = 500;  // Общее количество билетов
+                    double lossProb = random.Next(10, 80) / 100.0;  // Вероятность проигрыша от 0.1 до 0.79
 
-                    task1.answers.Add("Ф(" + String.Format("{0:0.0000}", x22) + ") - Ф(" + String.Format("{0:0.0000}", x11) + ")");
-                    //task1.answers.Add("Φ(" + String.Format("{0:0.0000}",x) + ")");
-                    double k11 = 1.0 / Math.Sqrt(100 * prob * (1 - prob));
-                    task1.answers.Add(string.Format("{0:0.00} * φ({1:0.00})", k11, x));
+                    int minCount = random.Next(1, 5) * 10;  // Минимальное количество проигрышных билетов от 10 до 40
+                    int maxCount;
+                    do
+                    {
+                        maxCount = random.Next(5, 11) * 10;  // Максимальное количество проигрышных билетов от 50 до 100
+                    } while (maxCount <= minCount);
+
+                    int equalCount = totalTickets / 2;  // Ровно половина билетов
+
+                    task1.condition = $"Вероятность покупки в лотерее проигрышного билета составляет {lossProb}. " +
+                        $"Какова вероятность того, что из {totalTickets} наугад приобретенных билетов будут без выигрыша:";
+                    task1.questions.Add($"не менее {minCount} и не более {maxCount} билетов;");
+                    task1.questions.Add($"ровно {equalCount} билетов;");
+
+                    double probRange = CalculateBinomialRangeProbability(totalTickets, lossProb, minCount, maxCount);
+                    double probExact = CalculateBinomialProbability(totalTickets, lossProb, equalCount);
+
+                    task1.answers.Add($"Вероятность, что проигрышных билетов будет от {minCount} до {maxCount}: {probRange:0.0000}");
+                    task1.answers.Add($"Вероятность, что проигрышных билетов будет ровно {equalCount}: {probExact:0.0000}");
+
+                    static double CalculateBinomialProbability(int n, double p, int k)
+                    {
+                        return Choose(n, k) * Math.Pow(p, k) * Math.Pow(1 - p, n - k);
+                    }
+
+                    static double CalculateBinomialRangeProbability(int n, double p, int k1, int k2)
+                    {
+                        double totalProb = 0;
+                        for (int k = k1; k <= k2; k++)
+                        {
+                            totalProb += CalculateBinomialProbability(n, p, k);
+                        }
+                        return totalProb;
+                    }
+
+                    static double Choose(int n, int k)
+                    {
+                        if (k > n) return 0;
+                        if (k == 0 || k == n) return 1;
+                        double result = 1;
+                        for (int i = 1; i <= k; i++)
+                        {
+                            result *= (n - (k - i)) / (double)i;
+                        }
+                        return result;
+                    }
+
                     return task1;
                 case 2:
                     Task task2 = new Task(10, 2);
@@ -499,18 +640,22 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(11, 1);
-                    
-                    var count = random.Next(1, 4);
-                    count = count == 1 ? 120 : count == 2 ? 180 : 240;
 
-                    task1.condition = "Среднее число вызовов, поступающих на АТС в минуту, равно " + count + ". Найти вероятность того, что за две секунды на АТС поступит менее двух вызовов.";
 
-                    var lambda = count / 60.0 * 2.0;
-                    var p0 = Math.Pow(lambda, 0) * Math.Exp(-lambda) / Factorial(0);
-                    var p1 = Math.Pow(lambda, 1) * Math.Exp(-lambda) / Factorial(1);
+                    int n = random.Next(1, 9 + 1) * 100; // Количество изделий
+                    double p = Math.Round(0.001 + random.NextDouble() * 0.008, 3); // Вероятность отказа одного изделия
 
-                    var result = p1 + p0;
-                    task1.answers.Add(String.Format("{0:0.0000}", result));
+                    task1.condition = $"Вероятность того, что изделие не выдержит испытание, равна {p}. " +
+                        $"Найти вероятность того, что из {n} изделий более чем одно не выдержит испытание.";
+
+                    double prob0 = Math.Pow(1 - p, n);
+                    double prob1 = n * p * Math.Pow(1 - p, n - 1);
+
+                    double probMoreThanOne = 1 - (prob0 + prob1);
+
+                    task1.answers.Add($" {probMoreThanOne:0.0000}");
+
+
                     return task1;
                 case 2:
                     Task task2 = new Task(11, 2);
@@ -534,46 +679,58 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
+                    double pe = random.Next(2, 9) / 10.0;  // Вероятность правильного ответа на вопрос
+                    int maxQuestions = 3;  // Максимальное количество вопросов
+
                     Task task1 = new Task(12, 1);
-                    
+                    task1.condition = $"Экзаменатор задает студенту дополнительные вопросы. " +
+                        $"Вероятность того, что студент ответит на любой заданный вопрос, равна {pe}. " +
+                        $"Преподаватель задает не более трех вопросов и прекращает экзамен, " +
+                        $"как только студент обнаруживает незнание ответа.";
+                    task1.questions.Add("Составить ряд распределения случайной величины X — числа " +
+                        "дополнительных вопросов, которые задаст преподаватель.");
+                    task1.questions.Add("Найти M(X), D(X), σ(X), F(X) этой случайной величины.");
 
-                    var prob =  random.Next(3, 7) / 10.0;
+                    double[] k = new double[maxQuestions + 1];
+                    double cumProbability = 0;
+                    double MX = 0;
+                    double DX = 0;
 
-                    task1.condition = "Вероятность поражения цели при одном выстреле равна " + prob + ".";
-                    task1.questions.Add("Составить ряд распределения числа выстрелов, производимых до первого поражения цели, если у стрелка четыре патрона.");
-                    task1.questions.Add("Найти M(X), D(X), σ(X), F(X) числа выстрелов до первого поражения цели.");
-                    task1.questions.Add("Построить график F(X).");
+                    // Расчет вероятностей и накопленной функции распределения
+                    for (int x = 0; x < maxQuestions; x++)
+                    {
+                        k[x] = Math.Pow(pe, x) * (1 - pe);
+                        cumProbability += k[x];
+                        MX += x * k[x];
+                        DX += x * x * k[x];
+                        task1.answers.Add($"P(x = {x}) = {k[x]:0.0000}");
+                    }
+                    k[maxQuestions] = Math.Pow(pe, maxQuestions);
+                    cumProbability += k[maxQuestions];
+                    MX += maxQuestions * k[maxQuestions];
+                    DX += maxQuestions * maxQuestions * k[maxQuestions];
+                    task1.answers.Add($"P(x = {maxQuestions}) = {k[maxQuestions]:0.0000}");
 
-                    var k1 = prob;
-                    var k2 = (1 - prob) * prob;
-                    var k3 = (1 - prob) * (1 - prob) * prob;
-                    var k4 = (1 - prob) * (1 - prob) * (1 - prob) * prob;
-                    var k5 = (1 - prob) * (1 - prob) * (1 - prob) * (1 - prob);
+                    DX = DX - MX * MX;
+                    double sigmaX = Math.Sqrt(DX);
 
-                    var MX = 1 * k1 + 2 * k2 + 3 * k3 + 4 * k4;
-                    var DX = 1 * k1 + 4 * k2 + 9 * k3 + 16 * k4 - Math.Pow(MX, 2);
+                    // Добавление математического ожидания, дисперсии и стандартного отклонения
+                    task1.answers.Add($"\nM(X) = {MX:0.0000}");
+                    task1.answers.Add($"D(X) = {DX:0.0000}");
+                    task1.answers.Add($"σ(X) = {sigmaX:0.0000}");
 
-                    task1.answers.Add( "\n" +
-                        "P(x = 0) = " + String.Format("{0:0.0000}", k1) + "\n" +
-                        "P(x = 1) = " + String.Format("{0:0.0000}",k2) + "\n" +
-                        "P(x = 2) = " + String.Format("{0:0.0000}", k3) + "\n" +
-                        "P(x = 3) = " + String.Format("{0:0.0000}", k4) + "\n" +
-                        "P(x = 4) = " + String.Format("{0:0.0000}", k5)
-                    );
-                    task1.answers.Add( "\n" + 
-                        "M(X) = " + String.Format("{0:0.0000}", MX) + "\n" +
-                        "D(X) = " + String.Format("{0:0.0000}", DX) + "\n" +
-                        "σ(X) = " + String.Format("{0:0.0000}", Math.Sqrt(DX)) + "\n" +
-                        "F(X) = \n" +
-                        "    ⎧ 0, x ≤ 0\n" +
-                        "    ⎨ " + String.Format("{0:0.0000}", k1) + ", 0 < x ≤ 1\n" +
-                        "    ⎨ " + String.Format("{0:0.0000}", k1 + k2) + ", 1 < x ≤ 2\n" +
-                        "    ⎨ " + String.Format("{0:0.0000}", k1 + k2 + k3) + ", 2 < x ≤ 3\n" +
-                        "    ⎨ " + String.Format("{0:0.0000}", k1 + k2 + k3 + k4) + ", 3 < x ≤ 4\n" +
-                        "    ⎩ " + String.Format("{0:0.0000}", k1 + k2 + k3 + k4 + k5) + ", 4 < x"
-                    );
+                    // Функция распределения
+                    string fX = "F(X) = \n    ⎧ 0, x ≤ 0\n";
+                    double F = 0;
+                    for (int i = 0; i <= maxQuestions; i++)
+                    {
+                        F += k[i];
+                        fX += $"    ⎨ {F:0.0000}, {i} < x ≤ {i + 1}\n";
+                    }
+                    fX += $"    ⎩ 1.0000, x > {maxQuestions}";
+                    task1.answers.Add(fX);
                     return task1;
-                  
+
                 case 2:
                     /*Task task2 = new Task(12, 2);
                     
@@ -662,37 +819,43 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(13, 1);
-                    
-                    var count = random.Next(3, 5);
+                    int n = random.Next(1, 9);
+                    double pe = random.Next(2, 9) / 10.0;
 
-                    task1.condition = "Игральная кость брошена " + count + " раза.";
-                    task1.questions.Add("Составить ряд распределения числа выпадений шестерки.");
+                    task1.condition = "Отдел технического контроля проверяет изделия на " +
+                        "стандартность. Вероятность того, что изделие стандартно, " +
+                        "равна " + pe + ". В партии " + n + " изделий.";
+                    task1.questions.Add("Составить ряд распределения числа стандартных деталей в партии из " + n + " изделий.");
                     task1.questions.Add("Найти M(X) и D(X) этой случайной величины.");
 
-                    var probs = new List<String>();
+                    string distribution = "";
+                    double MX = 0;
+                    double DX = 0;
 
-                    for(int i = 0; i <= count; i++)
+                    for (int k = 0; k <= n; k++)
                     {
-                        probs.Add("P(x = " + i + ") = " + (int)Math.Pow(5, count - i) * C(count, i) + "/" + (int)Math.Pow(6, count) + "\n");
+                        double prob = Choose(n, k) * Math.Pow(pe, k) * Math.Pow(1 - pe, n - k);
+                        distribution += $"P(x = {k}) = {prob:0.0000}\n";
+                        MX += k * prob;
+                        DX += k * k * prob;
+                    }
+                    DX = DX - MX * MX;
+
+                    static double Choose(int n, int k)
+                    {
+                        if (k > n) return 0;
+                        if (k == 0 || k == n) return 1;
+                        double result = 1;
+                        for (int i = 1; i <= k; i++)
+                        {
+                            result *= (n - (k - i)) / (double)i;
+                        }
+                        return result;
                     }
 
-                    var result = "";
-
-                    probs.ForEach(value => result += value);
-
-                    var mx = 0.0;
-                    var dx = 0.0;
-
-                    for (int i = 0; i <= count; i++)
-                    {
-                        mx += (Math.Pow(5, count - i) * C(count, i)) / (Math.Pow(6, count)) * i;
-                        dx += (Math.Pow(5, count - i) * C(count, i)) / (Math.Pow(6, count)) * Math.Pow(i,2);
-                    }
-
-                    dx -= Math.Pow(mx, 2);
-
-                    task1.answers.Add(result);
-                    task1.answers.Add(String.Format("\nM(X)={0:0.0000}\nD(X)={1:0.0000}",mx,dx));
+                    task1.answers.Add(distribution);
+                    task1.answers.Add($"M(X) = {MX:0.0000}");
+                    task1.answers.Add($"D(X) = {DX:0.0000}");
 
                     return task1;
                 case 2:
@@ -735,24 +898,17 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(14, 1);
-
-                    double prob = random.Next(1, 2 + 1) * 10 / 10000.0;
-                    if (random.Next(0, 1 + 1) == 0)
-                    {
-                        prob = random.Next(4, 5 + 1) * 10 / 10000.0;
-                    }
-                    int count = random.Next(1, 5 + 1) * 1000 / (int)(prob * 1000);
-
-                    //var count = random.Next(2,5) * 500;
-
-                    task1.condition = "Устройство содержит " + count + " ламп. Вероятность выхода из строя одной лампы в течение одного часа работы устройства равна " + prob + ".";
-                    task1.questions.Add("Составить ряд распределения числа ламп, вышедших из строя в течение одного часа работы устройства.");
+                    int n = 100; // Количество абонентов
+                    double pe = random.Next(2, 9) / 100.0; // Вероятность того, что абонент позвонит в течение минуты
+                    double a = n * pe;
+                    task1.condition = $"Коммутатор учреждения обслуживает {n} абонентов. Вероятность того, что в течение одной минуты абонент позвонит на коммутатор, равна {pe}.";
+                    task1.questions.Add("Составить ряд распределения числа абонентов, которые могут позвонить на коммутатор в течение одной минуты.");
                     task1.questions.Add("Найти M(X) этой случайной величины.");
 
-                    var a = count * prob;
 
                     task1.answers.Add(String.Format("Pn(m) = {0:0.0}^m * 1/m! * e^(-{0:0.0})", a));
-                    task1.answers.Add(String.Format("M(X) = {0:0.0}", a));
+                    task1.answers.Add($"M(X) = {a:0.0000}");
+
 
                     return task1;
                 case 2:
@@ -928,31 +1084,26 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(16, 1);
-                    
 
-                    var a = random.Next(0,3);
-                    var b = random.Next(3, 6);
 
-                    var alpha = a == 0 ? "0" : a == 1 ? "π/6" : "π/4";
-                    var beta = b == 3 ? "π/3" : b == 4 ? "π/2" : "π";
+                    var alpha = random.Next(-1, 5);
+                    var beta = random.Next(3, 12);
 
-                    var alphaF = a == 0 ? 0 : a == 1 ? Math.PI/6.0 : Math.PI/4.0;
-                    var betaF = b == 3 ? Math.PI / 3.0 : b == 4 ? Math.PI / 2.0 : Math.PI;
-
-                    task1.condition = "Дана функция распределения F(x) непрерывной случайной величины X:\n" + 
+                    task1.condition = "Дана функция распределения F(x) непрерывной случайной величины X:\n" +
                         "F(x) =\n" +
                         "     ⎧ 0, x ≤ 0\n" +
-                        "     ⎨ (1/2) * (1 - cos x), 0 < x ≤ π\n" +
-                        "     ⎩ 1, x > π\n" +
-                        "α = " + alpha + ", β = " + beta + "\n" + 
+                        "     ⎨ x/4, 0 < x ≤ 4\n" +
+                        "     ⎩ 1, x > 4\n" +
+                        "α = " + alpha + ", β = " + beta + "\n" +
                         "Требуется:";
                     task1.questions.Add("Найти плотность вероятности f(x).");
                     task1.questions.Add("Построить графики F(x) и f(x).");
                     task1.questions.Add("Найти P(α < X < β) для данных α, β.");
 
-                    task1.answers.Add("\nf(x) = \n    ⎧ 0, x ≤ 0\n    ⎨ sin(x) / 2, 0 < x ≤ π\n    ⎩ 0, x > π");
+
+                    task1.answers.Add("\nf(x) = \n    ⎧ 0, x ≤ 0\n    ⎨ x/4, 0 < x ≤ 10\n    ⎩ 0, x > 4");
                     task1.answers.Add("");
-                    task1.answers.Add(String.Format("P(α < X < β) = {0:0.0000}", ((1.0/2.0) * (1 - Math.Cos(betaF))) - ((1.0/2.0) * (1 - Math.Cos(alphaF)))));
+                    task1.answers.Add(String.Format("P(α < X < β) = {0:0.0000}", (beta * beta / 100.0) - (alpha * alpha / 100.0)));
                     return task1;
                 case 2:
                     Task task2 = new Task(16, 2);
@@ -995,7 +1146,7 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(17, 1);
-                    
+
 
                     var variant = random.Next(1, 4);
                     var start = variant == 1 ? 2 : variant == 2 ? 2 : 3;
@@ -1003,28 +1154,24 @@ namespace TaskGenerator
 
                     task1.condition = "Дана плотность вероятности f(X) непрерывной случайной величины X:\nf(x)=\n" +
                         "     ⎧ 0, x < " + start + "\n" +
-                        "     ⎨ a(x-2)(x-4), " + start + " ≤ x < " + end + "\n" +
+                        "     ⎨ a(1-x), " + start + " ≤ x < " + end + "\n" +
                         "     ⎩ 0, x > " + end;
                     task1.questions.Add("Найти параметр a.");
                     task1.questions.Add("Построить функцию распределения F(X).");
                     task1.questions.Add("Построить графики f(X) и F(X).");
 
-                    var aa = 1 / (fun(end) - fun(start));
-
-                    var offset = aa / 3.0 * start * start * start - 3 * aa * start * start + 8 * aa * start;
-                    task1.answers.Add("a = " + String.Format("{0:0.00}", aa));
+                    double ot = 1 / ((double)end - ((double)end * (double)end / 2) - ((double)start - ((double)start * (double)start / 2)));
+                    task1.answers.Add(string.Format("A={0:0.0000}", ot));
+                    double f1 = ot;
+                    double f2 = ot * ot;
+                    double f3 = start * ot + (start * start) / 2 * ot;
 
                     task1.answers.Add(
                         "F(x)=\n" +
-                        "     ⎧ 0, x < " + start + "\n" +
-                        "     ⎨ " + String.Format("{0:0.00}x³ + {1:0.00}x² - {2:0.00}x + {3:0.0000}",
-                        aa / 3.0,
-                        Math.Abs(3 * aa),
-                        Math.Abs(8 * aa),
-                        Math.Abs(offset)
-                        ) + ", " + start + " ≤ x < " + end + "\n" +
-                        "     ⎩ 1, x > " + end
-                    );
+                                     "     ⎧ 0, x < " + start + '\n' +
+                                     "     ⎨ " + string.Format("{0:0.000}x²+{1:0.000}x-{2:0.000}", f1, f2, f3) + ", " + start + " ≤ x ≤ " + end + '\n' +
+                                     "     ⎩ 1, x > " + end
+                        );
 
                     return task1;
                 case 2:
@@ -1085,18 +1232,19 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(18, 1);
-                    
 
-                    var aa = random.Next(0,11) / -10.0 + 0.5;
-                    var bb = random.Next(0,3) * 0.5 + 1;
-                    
-                    task1.condition = "Дана плотность вероятности f(x) непрерывной случайной величины X, имеющая две ненулевые составляющие формулы:\nf(x)=\n" +
-                        "     ⎧ 0, x ≤ 0\n" +
-                        "     ⎨ x, 0 < x ≤ 1 \n" +
-                        "     ⎨ -x + 2, 1 < x ≤ 2\n" +
-                        "     ⎩ 0, x > 2\n" +
-                        "α=" + aa + " ,β=" + bb + "\n" +
-                        "Требуется:";
+                    var aa1 = random.Next(0, 11) / -10.0 + 0.5;
+                    var bb1 = random.Next(0, 3) * 0.5 + 1;
+
+                    task1.condition = "Дана плотность вероятности f(x) непрерывной случайной величины X, " +
+                        "имеющая две ненулевые составляющие формулы:\nf(x)=\n" +
+                                     "     ⎧ 0, x ≤ 0" + '\n' +
+                                     "     ⎨ 2x/5, 0 ≤ x ≤ 1" + '\n' +
+                                     "     ⎨ 2/5, 1 ≤ x ≤ 3" + '\n' +
+                                     "     ⎩ 0, x > 3" + '\n' +
+                                     "α=" + aa1 + ",β=" + bb1 + '\n' +
+                                     "Требуется:";
+
                     task1.questions.Add("Проверить свойство -∞∫∞(f(x)dx)=1.");
                     task1.questions.Add("Найти функцию распределения F(x).");
                     task1.questions.Add("Найти P(α≤x≤β) для данных α,β.");
@@ -1104,25 +1252,22 @@ namespace TaskGenerator
                     task1.questions.Add("Построить график f(x).");
 
                     task1.answers.Add("Условие выполняется.");
-                    task1.answers.Add("F(X) =\n" +
-                        "     ⎧ 0, x ≤ 0\n" +
-                        "     ⎨ (x²)/2, 0 < x ≤ 1 \n" +
-                        "     ⎨ -(x²)/2 + 2x - 1, 1 < x ≤ 2\n" +
-                        "     ⎩ 1, x > 2");
+                    task1.answers.Add("F(x)=" + '\n' +
+                                      "     ⎧ 0, x ≤ 0" + '\n' +
+                                      "     ⎨ x²/5, 0 ≤ x ≤ 1" + '\n' +
+                                      "     ⎨ 2x/5, 1 ≤ x ≤ 3" + '\n' +
+                                      "     ⎩ 1, x > 3");
 
-                    var realA = aa < 0 ? 0 : aa;
-                    var realB = bb > 2 ? 2 : bb;
+                    var realA1 = aa1 < 0 ? 0 : aa1;
+                    var realB1 = bb1 > 3 ? 3 : bb1;
 
-                    var ans = fun3(realB) - fun2(realA);
-                    task1.answers.Add("P(α≤x≤β) = " + String.Format("{0:0.0000}", ans));
+                    double ot3 = fun5(realB1) - fun4(realA1);
+                    task1.answers.Add("P(α≤x≤β) = " + String.Format("{0:0.000}", ot3));
 
-                    var mx = 1;
-                    var dx = 1 / 4.0 + 11/12.0 - 1;
-                    var delta = Math.Sqrt(dx);
-                    task1.answers.Add(String.Format("M(X)={0:0.0000}; D(X)={1:0.0000}; σ(X)={2:0.0000}", mx, dx, delta));
-
+                    double x1 = 4.0 / 3.0, x2 = 7.0 / 18.0, x3 = Math.Sqrt(7.0 / 18.0);
+                    task1.answers.Add(string.Format("M(X)={0:0.000}, D(X)={1:0.000}, σ(X)={2:0.000}", x1, x2, x3));
                     return task1;
-                    
+
                 case 2:
                     Task task2 = new Task(18, 2);
 
@@ -1166,20 +1311,21 @@ namespace TaskGenerator
             {
                 case 1:
                     Task task1 = new Task(19, 1);
+                    double m = random.Next(1, 8); // среднее значение (математическое ожидание)
+                    double sigma = random.Next(1, 8) * 10 / 100.0; ; // стандартное отклонение
+                    double gran = random.Next(1, 9) / 10.0;
 
-                    
+                    task1.condition = "Диаметр детали — случайная величина X с нормальным законом распределения" + m + " см; " + sigma + " см).";
+                    task1.questions.Add("В каком интервале должны находиться диаметры деталей, чтобы вероятность невыхода за границы интервала была равна " + gran + "?");
 
-                    var lambda = random.Next(6) + 5; 
+                    // Значение z для 95% доверительного интервала (для двустороннего интервала это ±1.96)
+                    double z = 1.96;
 
-                    task1.condition = "Срок службы прибора – случайная величина X, распределенная по экспоненциальному закону с параметром λ = " + lambda + ". Необходимо:";
-                    task1.questions.Add("Указать плотность вероятности f(x) и числовые характеристики этой случайной величины.");
-                    task1.questions.Add("Построить кривую распределения.");
+                    double lowerBound = m - z * sigma; // Нижняя граница интервала
+                    double upperBound = m + z * sigma; // Верхняя граница интервала
 
-                    task1.answers.Add("f(x)=\n" +
-                        "     ⎧ " + lambda + " * exp(-" + lambda + "x), x >= 0\n" +
-                        "     ⎩ 0, x < 0\n\n" +
-                        String.Format("M(X) = {0:0.0000}; D(X) = {1:0.0000}", (1.0 / lambda), (1.0 / (lambda * lambda))));
-                        
+                    task1.answers.Add($" от {lowerBound:0.0000} см до {upperBound:0.0000} см.");
+
                     return task1;
                 case 2:
                     Task task2 = new Task(19, 2);
@@ -1201,14 +1347,21 @@ namespace TaskGenerator
             switch (subtype)
             {
                 case 1:
+
+                    double lambda = 0.037; // Параметр λ экспоненциального распределения
+
                     Task task1 = new Task(20, 1);
-                    double σ = random.Next(10, 21) / 10.0;
-                    double val = random.Next(5, (int)(σ * 10)) / 10.0;
-                    task1.condition = "Производится взвешивание стандартных узлов. Систематические ошибки " +
-                        "взвешивания отсутствуют, а случайные – подчинены нормальному закону " +
-                        "с σ = " + σ + " кг. С какой вероятностью ошибка очередного взвешивания не превысит " +
-                        "по абсолютной величине " + val + " кг?";
-                    task1.answers.Add(String.Format("P(|X| < " + val + ") = 2Ф({0:0.00})", val / σ));
+                    task1.condition = "Случайная величина T имеет плотность вероятности f(t) = 0.037e^–0.037t(t ≥ 0).";
+                    task1.questions.Add("Найти числовые характеристики: MT, DT, σ(T).");
+
+                    double MT = 1 / lambda;
+                    double DT = 1 / (lambda * lambda);
+                    double sigmaT = Math.Sqrt(DT);
+
+                    task1.answers.Add($"M(T) = {MT:0.0000}"); // Математическое ожидание
+                    task1.answers.Add($"D(T) = {DT:0.0000}"); // Дисперсия
+                    task1.answers.Add($"σ(T) = {sigmaT:0.0000}"); // Стандартное отклонение
+
                     return task1;
                 case 2:
                     Task task2 = new Task(20, 2);
@@ -1238,16 +1391,20 @@ namespace TaskGenerator
                 case 1:
                     Task task1 = new Task(21, 1);
                     int sigma = random.Next(2, 10 + 1);
-                    int mx = random.Next(30, 50 + 1);
-                    int a = random.Next(mx - 10, mx - 5);
-                    int b = random.Next(mx + 5, mx + 11);
-                    task1.condition = "Время формирования поездов подчиняется нормальному закону распределения " +
-                        "со средним квадратическим отклонением "+ sigma + " мин и средним значением "+ mx + " мин. " +
-                        "Определить вероятность того, что время формирования поезда примет значение " +
-                        "в интервале от "+a+" до "+b+" мин.";
+                    int m = random.Next(30, 50 + 1);
+                    int a = random.Next(m - 10, m - 5);
+                    int b = random.Next(m + 5, m + 11);
+                    task1.condition = "Время движения поезда по перегону Густафьево–Сыропятское имеет" +
+                        " нормальное распределение со средним временем " + m + " мин и стандартным отклонением " + sigma + " мин. " +
+                        "Определить вероятность того, что время движения поезда окажется в интервале от " + a + " до " + b + " мин.";
 
-                    task1.answers.Add(String.Format("P("+a+" < X < "+b+") = Ф({0:0.00}) - Ф({1:0.00})",
-                        (b-mx)/((double) sigma), (a-mx)/((double) sigma)));
+                    // Перевод границ в стандартизированную форму Z
+                    double zLower = (a - m) / sigma;
+                    double zUpper = (b - m) / sigma;
+
+                    // Вычисление вероятности
+                    task1.answers.Add(String.Format("P(" + a + " < X < " + b + ") = 2Ф({0:0.0000}) - 1", (zUpper - zLower) / 2 + Math.Abs(zLower)));
+
                     return task1;
                 case 2:
                     
