@@ -660,15 +660,15 @@ namespace TaskGenerator
                 case 2:
                     Task task2 = new Task(11, 2);
 
-                    int n = random.Next(1800, 2200);
-                    double p = random.Next(1, 10) / 10000.0;
-                    double q = 1 - p;
-                    task2.condition = $" Аппаратура содержит {n} одинаково надежных элементов; вероятность отказа для каждого из них " +
-                        $"равна {p}.Какова вероятность отказа данной аппаратуры, если он наступает при отказе хотя бы одного элемента?";
+                    int _n = random.Next(1800, 2200);
+                    double _p = random.Next(1, 10) / 10000.0;
+                    double q = 1 - _p;
+                    task2.condition = $" Аппаратура содержит {_n} одинаково надежных элементов; вероятность отказа для каждого из них " +
+                        $"равна {_p}.Какова вероятность отказа данной аппаратуры, если он наступает при отказе хотя бы одного элемента?";
                     //double x = (studentsAmount - allStudentsAmount * (1 / 365.0)) / Math.Sqrt(allStudentsAmount * (1 / 365.0) * (1 - 1 / 365.0));
                     //double k = 1 / Math.Sqrt(allStudentsAmount * (1 / 365.0) * (1 - 1 / 365.0));
                     // task2.answers.Add(string.Format("1/√("+ allStudentsAmount + "*(1/365)*(1-1/365)) * φ({0:0.00}) ≈ {1:0.00} * φ({0:0.00})", x, k));
-                    var ans = 1 - ((1 / Math.Sqrt(n*p*q))*0.3989);
+                    var ans = 1 - ((1 / Math.Sqrt(_n*_p*q))*0.3989);
                     task2.answers.Add(string.Format("{0:0.000}", ans));
                     return task2;
             }
@@ -861,19 +861,19 @@ namespace TaskGenerator
                 case 2:
                     Task task2 = new Task(13, 2);
                     
-                    int n = random.Next(5, 10);
+                    int _n = random.Next(5, 10);
                     double ver = random.Next(6, 9) / 10.0;
                     task2.condition = $"Составить ряд распределения дискретной случайной величины X — числа отказов элемента некоторо гоустройства " +
-                        $"в {n} независимых опытах, если вероятность отказа элемента в каждом опыте" +
+                        $"в {_n} независимых опытах, если вероятность отказа элемента в каждом опыте" +
                         $" равна {ver}.Найти M(X) и D(X).";
 
-                    double[] p = new double[n + 1];
+                    double[] p = new double[_n + 1];
                     for (int i = 0; i < p.Length; i++)
-                        p[i] = C(n, i) * Math.Pow(ver, n);
+                        p[i] = C(_n, i) * Math.Pow(ver, _n);
 
                     string str = "";
                     for (int i = 0; i < p.Length; i++)
-                        str += "P(x=" + i + ")=C(" + n + "," + i + ")*0.5^" + n + "=" + p[i] + "\n";
+                        str += "P(x=" + i + ")=C(" + _n + "," + i + ")*0.5^" + _n + "=" + p[i] + "\n";
                     task2.answers.Add(str);
                     double mx2 = 0;
                     for (int i = 1; i <= 4; i++)
@@ -1186,21 +1186,21 @@ namespace TaskGenerator
                     task2.questions.Add("Найти параметр a.");
                     task2.questions.Add("Найти функцию распределения F(x).");
                     Func<double, double> integral1 = x => 2.0 * Math.Pow(x, 3) - 0.5 * Math.Pow(x, 2) - 3 * x;
-                    double ot = 1 / ( integral1(b)-integral1(a) );
-                    task2.answers.Add(string.Format("A={0:0.0000}",ot));
+                    double _ot = 1 / ( integral1(b)-integral1(a) );
+                    task2.answers.Add(string.Format("A={0:0.0000}",_ot));
 
                     double C = integral1(a);
                     task2.answers.Add(
                         "F(x)=\n" +
                                      "     ⎧ 0, x < " + a + '\n' +
-                                     "     ⎨ " + string.Format("{0:0.000}(2x³ - 0.5x² - 3x + ({1:0.000}))", ot,C) + ", " + a + " ≤ x ≤ " + b + '\n' +
+                                     "     ⎨ " + string.Format("{0:0.000}(2x³ - 0.5x² - 3x + ({1:0.000}))", _ot,C) + ", " + a + " ≤ x ≤ " + b + '\n' +
                                      "     ⎩ 1, x > " + b
                         );
 
-                    Func<double, double> integralMat = x => ot * (2.5*Math.Pow(x,4) - Math.Pow(x,3)/3.0 - 1.5*Math.Pow(x,2) );
+                    Func<double, double> integralMat = x => _ot * (2.5*Math.Pow(x,4) - Math.Pow(x,3)/3.0 - 1.5*Math.Pow(x,2) );
                     double matx = integralMat(b)-integralMat(a);
-                    Func<double, double> integralAs = x => ot*(Math.Pow(x - matx, 4) * (4 * x * (5 * x + 2 * matx - 1) + (matx - 3) * (2 * matx + 5))) / 20;
-                    Func<double, double> integralEk = x => ot * ((Math.Pow(x - a , 5) * (5 * x * (36 * x + 12 * matx- 7) + 12 * matx*matx - 7 * matx - 126)) / 210);
+                    Func<double, double> integralAs = x => _ot*(Math.Pow(x - matx, 4) * (4 * x * (5 * x + 2 * matx - 1) + (matx - 3) * (2 * matx + 5))) / 20;
+                    Func<double, double> integralEk = x => _ot * ((Math.Pow(x - a , 5) * (5 * x * (36 * x + 12 * matx- 7) + 12 * matx*matx - 7 * matx - 126)) / 210);
                     double _as = integralAs(b) - integralAs(a);
                     double _ek = integralEk(b) - integralEk(a);
                     task2.answers.Add(string.Format("As = {0:0000}, Ek = {1:0000}", _as, _ek));
@@ -1218,7 +1218,15 @@ namespace TaskGenerator
         {
             return -(x * x) / 2.0 + 2 * x - 1;
         }
-        static double PforTask18(double down, double up)
+        static double fun4(double x)
+        {
+            return x* x * (1.0 / 3.0);
+        }
+        static double fun5(double x)
+        {
+            return ((-(x * x) - 5) / 6.0 + x + 1.0 / 3.0);
+        }
+    static double PforTask18(double down, double up)
         {
             Func<double, double> firstx = x => (Math.Pow(x + 3, 3) ) / 103.0;
             Func<double, double> secondx = x => (( 3 * x )/ 17.0 ) - ( ( 3 * x * x )/ 136.0);
@@ -1295,11 +1303,11 @@ namespace TaskGenerator
                                       "     ⎨ 27/103 + 3x/17 - 3x²/136, 0 < x ≤ 4" + '\n' +
                                       "     ⎩ 1, x > 4");
 
-                    double ot3 = PforTask18(aa2,bb2);
-                    task2.answers.Add("P(α≤x≤β) = " + String.Format("{0:0.000}", ot3));
+                    double _ot3 = PforTask18(aa2,bb2);
+                    task2.answers.Add("P(α≤x≤β) = " + String.Format("{0:0.000}", _ot3));
 
-                    double x1 = 0.34, x2 = 0.98, x3 = 0.98;
-                    task2.answers.Add(string.Format("M(X)={0:0.000}, D(X)={1:0.000}, σ(X)={2:0.000}", x1, x2, x3));
+                    double _x1 = 0.34, _x2 = 0.98, _x3 = 0.98;
+                    task2.answers.Add(string.Format("M(X)={0:0.000}, D(X)={1:0.000}, σ(X)={2:0.000}", _x1, _x2, _x3));
                     return task2;
             }
             throw new ArgumentException();
@@ -1329,13 +1337,13 @@ namespace TaskGenerator
                     return task1;
                 case 2:
                     Task task2 = new Task(19, 2);
-                    double sigma = (double)random.Next(1, 10);
+                    double sigma2 = (double)random.Next(1, 10);
                     double mat = (double) random.Next(70, 90);
                     double alpha = (double)random.Next(50, 60);
                     double beta = (double)random.Next(90, 100);
-                    Func<double, double> phi = x => (x - mat) / (sigma);
+                    Func<double, double> phi = x => (x - mat) / (sigma2);
                     task2.condition = $"Динамическая нагрузка X на соединительную раму тележек восьмиосного вагона имеет " +
-                        $"нормальное распределение(m = {mat} т; σ = {sigma} т). Какова вероятность диапазона нагрузок от {alpha} до {beta} т ?";
+                        $"нормальное распределение(m = {mat} т; σ = {sigma2} т). Какова вероятность диапазона нагрузок от {alpha} до {beta} т ?";
                     task2.answers.Add(string.Format("Ф({0:0.00})-Ф({1:0.00})",phi(beta),phi(alpha)));
                     return task2;
             }
